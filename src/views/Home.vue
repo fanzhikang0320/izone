@@ -1,5 +1,5 @@
 <template>
-    <div>登录页面</div>
+  <div>这里是主页</div>
 </template>
 
 <script>
