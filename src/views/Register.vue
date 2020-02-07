@@ -20,6 +20,9 @@
                         <el-radio :label="0">女</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="出生日期" prop="birthday">
+                    <el-date-picker v-model="formData.birthday" placeholder="选择日期" format="yyyy年MM月dd日" value-format="timestamp" type="date"></el-date-picker>
+                </el-form-item>
                 <el-form-item label="验证码" prop="validateCode">
                     <el-input type="text" v-model="formData.validateCode" class="code"></el-input>
                     <el-button type="success" :loading="isLoading" @click="getValidateCode">{{buttonContent}}</el-button>
@@ -90,20 +93,29 @@ export default {
                 callback();
             }
         };
+        var validateBirthday = (rule,value,callback) => {
+            if (!value) {
+                return callback(new Error('请选择日期！'));
+            } else {
+                callback();
+            }
+        };
         return {
             formData: {
                 nickname: '',
                 account: '',
                 password: '',
                 confirmPassword: '',
-                validateCode: ''
+                validateCode: '',
+                birthday: ''
             },
             rules: {
                 nickname: [{validator: validateName}],
                 account: [{validator: validateAccount}],
                 password: [{validator: validatePassword}],
                 confirmPassword: [{validator: validateConfirm}],
-                validateCode: [{validator: validateVCode}]
+                validateCode: [{validator: validateVCode}],
+                birthday: [{validator: validateBirthday}]
             },
             sex: 1,
             buttonContent: '获取验证码',
@@ -144,6 +156,11 @@ export default {
                     },2000)
                 } else {
                     window.console.log(error); //打印不符合验证规则的字段
+                    this.$message({
+                        type: 'warning',
+                        message: '请填写符合规则的内容！'
+                    });
+                    return false;
                 }
             });
         },
