@@ -1,7 +1,13 @@
 <template>
   <div class="main-wrapper">
       <el-row>
-          <el-col :span="17" class="main-left">center</el-col>
+          <!-- 左边区域 -->
+          <el-col :span="5" class="main-left">left</el-col>
+          <!-- 中间区域 -->
+          <el-col :span="12" class="main-center">
+              <Dynamic/>
+          </el-col>
+          <!-- 右边区域 -->
           <el-col :span="7" class="main-right">
               <UserInfo />
               <RankingList />
@@ -13,6 +19,7 @@
 <script>
 import UserInfo from '@/components/UserInfo.vue';
 import RankingList from '@/components/RankingList.vue';
+import Dynamic from '@/components/Dynamic.vue';
 export default {
     data () {
         return {
@@ -20,6 +27,7 @@ export default {
         }
     },
     components: {
+        Dynamic,
         UserInfo,
         RankingList
     },
@@ -37,6 +45,9 @@ export default {
     margin: 0 auto;
     min-width: 1024px;
     background-color: #fff;
+}
+.main-center {
+    background-color: gray;
 }
 .main-left {
     background-color: pink;

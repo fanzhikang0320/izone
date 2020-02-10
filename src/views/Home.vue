@@ -4,7 +4,8 @@
       <Header></Header>
     </el-header>
     <el-main class="main">
-      <Main></Main>
+      <router-view></router-view>
+      <!-- <Main></Main> -->
     </el-main>
     <el-footer class="footer">
       <Footer></Footer>
@@ -15,7 +16,7 @@
 <script>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import Main from '@/components/Main.vue';
+// import Main from '@/components/Main.vue';
 export default {
   data () {
     return {
@@ -24,8 +25,7 @@ export default {
   },
   components: {
     Header,
-    Footer,
-    Main
+    Footer
   }
 }
 </script>

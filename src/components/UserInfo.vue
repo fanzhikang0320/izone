@@ -18,7 +18,7 @@
             <div class="hurdle">
             <div><i class="el-icon-chat-line-square"></i>留言板</div>
             <div><i class="el-icon-star-on"></i>我的关注</div>
-            <div><i class="el-icon-time"></i>发布历史</div>
+            <div><i class="el-icon-user-solid"></i>个人中心</div>
             <div><i class="el-icon-edit"></i>修改信息</div>
             </div>
         </div>

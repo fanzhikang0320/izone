@@ -2,11 +2,26 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Home from '@/views/Home.vue';
-import Login from '@/views/Login.vue';
-import Register from '@/views/Register.vue';
-import Error from '@/views/Error.vue';
+import Main from '@/components/Main.vue';
 Vue.use(VueRouter)
-
+const secondRoutes = [
+  {
+    path:'firstpage',
+    component: Main
+  },
+  {
+    path: 'diarypage',
+    component: () => import ('@/components/Diary.vue')
+  },
+  {
+    path: 'otherpage',
+    component: () => import ('@/components/Other.vue')
+  },
+  {
+    path: 'aboutpage',
+    component: () => import ('@/components/About.vue')
+  }
+];
 const routes = [
   {
     path: '/',
@@ -14,19 +29,21 @@ const routes = [
   },
   {
     path: '/home',
-    component: Home
+    component: Home,
+    redirect: '/home/firstpage',
+    children: secondRoutes
   },
   {
     path: '/login',
-    component: Login
+    component: () => import ('@/views/Login.vue')
   },
   {
     path: '/register',
-    component: Register
+    component: () => import ('@/views/Register.vue')
   },
   {
     path: '*',
-    component: Error
+    component: () => import ('@/views/Error.vue')
   }
 ];
 

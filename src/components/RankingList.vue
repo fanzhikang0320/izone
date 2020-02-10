@@ -1,19 +1,19 @@
 <template>
   <div class="ranking-wrapper">
       <div class="title-box">
-            <h3 class="title">人气排行榜</h3>
-            <p class="line"></p>
+        <h3 class="title">人气排行榜</h3>
+        <p class="line"></p>
       </div>
-      <div class="ranking-row" v-for="(item,index) in hotInfo" :key="index">
-          <div class="ranking-row-left">
-              <img :src="item.headImg" class="headImg">
-              <div :class="{'num': true,'firstHot': index == 0 ,'secondHot': index == 1, 'thirdHot': index == 2}">{{index + 1}}</div>
-          </div>
-          <p class="nickname">{{item.nickname}}</p>
-          <div class="ranking-row-right">
-              <img src="@/assets/img/fire.png" alt="热度" title="热度" class="hotImg">
-              <p class="hotValue">{{item.hotValue > 99999 ? '99999+' : item.hotValue}}</p>
-          </div>
+      <div class="ranking-row" v-for="(item,index) in hotInfo" :key="index" @click="handleInfo(item.account)">
+        <div class="ranking-row-left">
+            <img :src="item.headImg" class="headImg">
+            <div :class="{'num': true,'firstHot': index == 0 ,'secondHot': index == 1, 'thirdHot': index == 2}">{{index + 1}}</div>
+        </div>
+        <p class="nickname">{{item.nickname}}</p>
+        <div class="ranking-row-right">
+            <img src="@/assets/img/fire.png" alt="热度" title="热度" class="hotImg">
+            <p class="hotValue">{{item.hotValue > 99999 ? '99999+' : item.hotValue}}</p>
+        </div>
       </div>
   </div>
 </template>
@@ -86,6 +86,13 @@ export default {
             ]
 
         }
+    },
+    methods: {
+        //当用户点击某个排行榜当中的人物时，跳转至他的个人信息页
+        handleInfo (account) {
+            window.console.log(account);
+            window.console.log('点我进入我的个人主页');
+        }
     }
     
 }
@@ -133,6 +140,7 @@ export default {
     padding: 0 9px;
     overflow: hidden;
     border-bottom: 1px solid rgb(204, 200, 200);
+    cursor: pointer;
 }
 .ranking-wrapper .ranking-row .ranking-row-left {
     position: relative;
