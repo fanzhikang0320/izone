@@ -11,11 +11,11 @@
     </div>
     <div class="footer-right">
       联系站长：
-      <el-tooltip effect="light">
+      <el-tooltip effect="light" placement="top">
         <img src="@/assets/img/wechatcode.jpg" alt="微信二维码" slot="content" style="width:100px;height:100px;">
         <img src="@/assets/img/wechat.png" alt="wechat" title="站长微信">
       </el-tooltip>
-      <el-tooltip effect="light">
+      <el-tooltip effect="light" placement="top">
         <img src="@/assets/img/qqcode.jpg" alt="qq二维码" slot="content" style="width:100px;height:100px;">
         <img src="@/assets/img/qq.png" alt="qq" title="站长QQ">
       </el-tooltip>
