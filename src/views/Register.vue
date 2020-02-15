@@ -15,7 +15,7 @@
                     <el-input type="password" v-model="formData.confirmPassword"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-radio-group v-model="sex">
+                    <el-radio-group v-model="formData.sex">
                         <el-radio :label="1">男</el-radio>
                         <el-radio :label="0">女</el-radio>
                     </el-radio-group>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data: function() {
         var validateName = (rule,value,callback) => {
@@ -107,7 +108,8 @@ export default {
                 password: '',
                 confirmPassword: '',
                 validateCode: '',
-                birthday: ''
+                birthday: '',
+                sex: 1
             },
             rules: {
                 nickname: [{validator: validateName}],
@@ -117,16 +119,15 @@ export default {
                 validateCode: [{validator: validateVCode}],
                 birthday: [{validator: validateBirthday}]
             },
-            sex: 1,
             buttonContent: '获取验证码',
             isLoading: false, //控制验证码的loading
-            code: 1234 //验证码
+            code: '' //验证码
         };
     },
     methods: {
         //提交表单
         formSubmit () {
-            this.$refs['ruleForm'].validate((valid,error) => {
+            this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
                     //加载loading
                     const loading = this.$loading({
@@ -136,26 +137,39 @@ export default {
                         background: 'rgba(0,0,0,0.7)'
                     });
                     //向服务器发送表单数据,验证账号是否已被注册
-                    //......
-                    //取消loading，弹框，跳转
-                    setTimeout(() => {
-                        loading.close(); //关闭全局loading
-                        this.$confirm('您已完成注册，是否去登录？','提示',{
-                            confirmButtonText: '确定',
-                            cancelButtonText: '暂时不用',
-                            type: 'success'
-                        }).then(() => {
-                            //点击确定,跳转至登录页面
-                            window.open('/login','_self');
-
-                        }).catch(() => {
-                            //点击取消，清空所有内容
-                            this.formReset();
+                    var that = this;
+                    axios.post('/api/register',this.formData)
+                        .then(function (res) {
+                            loading.close(); //关闭加载
+                            if (res.data.isRegister) {
+                                that.$confirm('您已完成注册，是否去登录？','提示',{
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '暂时不用',
+                                    type: 'success'
+                                }).then(() => {
+                                    window.open('/login','_self');
+                                }).catch(() => {
+                                    //点击取消，清空所有内容
+                                    that.formReset();
+                                })
+                            } else {
+                                that.$confirm('该账号已被注册','提示',{
+                                    confirmButtonText: '好的',
+                                    showCancelButton: false,
+                                    type: 'warning'
+                                }).then( () => {
+                                    that.formReset();
+                                }).catch(() => {
+                                    that.formReset();
+                                })
+                            }
+                            
+                            that.formReset(); //清空表单数据
                         })
-                        this.formReset();
-                    },2000)
+                        .catch(function (err) {
+                            window.console.log(err);
+                        })
                 } else {
-                    window.console.log(error); //打印不符合验证规则的字段
                     this.$message({
                         type: 'warning',
                         message: '请填写符合规则的内容！'
@@ -171,9 +185,26 @@ export default {
         //获取验证码
         getValidateCode () {
             //发送请求，由后端进行生成
-            this.isLoading = true;
+            this.code = '';
+            this.isLoading = true;//开启loading
             this.buttonContent = '正在获取';
-            // 。。。。
+            var that = this;
+            //请求验证码
+            axios.get('/api/getcode')
+                .then((res) => {
+                    that.code = res.data.code;
+                    this.$notify({
+                        title: '验证码',
+                        message: res.data.code,
+                        type: 'success',
+                        duration: 5000
+                    })
+                    that.isLoading = false; //取消加载loading
+                    that.buttonContent = '获取验证码'; //更改按钮文字
+                })
+                .catch((err) => {
+                    window.console.log(err);
+                })
         }
         
     },

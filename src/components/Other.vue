@@ -303,9 +303,6 @@ export default {
 .caseInfo-top .desc-box .desc-info .info-text.info-text-more {
     height: auto;
 }
-.caseInfo-top .desc-box .desc-info .info-text.info-text-more.info-text-close {
-    height: 42px;
-}
 
 .caseInfo-bottom {
     display: flex;

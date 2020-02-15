@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data () {
         var validateAccount = (rule,value,callback) => {
@@ -54,15 +55,34 @@ export default {
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
                     //校验成功,开启loading，发送请求，成功关闭loading，跳转，失败关闭loading，弹框
-                    window.console.log(this.ruleForm);
                     this.isLoading = true;
-                    this.btnContent = '登录中...'
-                    setTimeout(() => {
-                        this.isLoading = false;
-                        this.btnContent = '立即登录';
-                        window.open('/home','_self');
-                    },3000);
-
+                    this.btnContent = '登录中...';
+                    let that = this;
+                    axios.post('/api/getlogin',this.ruleForm)
+                        .then((res) => {
+                            //判断返回结果是否可以登录
+                            if (res.data.isLogin) {
+                                //可以登陆
+                                that.isLoading = false;
+                                that.btnContent = '立即登录';
+                                //是否要种cookie
+                                if (that.checked) {
+                                    that.setCookie('login',true,7);
+                                }
+                                window.open('/home','_self');
+                               
+                            } else {
+                                that.isLoading = false;
+                                that.btnContent = '立即登录';
+                                that.$message({
+                                    type: 'error',
+                                    message: '账号或密码输入错误'
+                                })
+                            }
+                        })
+                        .catch((err) => {
+                            window.console.log(err);
+                        })
 
                 } else {
                     //验证规则失败，返回不通过的字段属性,弹出警告
@@ -73,6 +93,17 @@ export default {
                     return false;
                 }
             })
+        },
+        //设置cookie
+        setCookie (key,value,exdays) {
+            let cookie = key + '=' + value + ';';
+            if (exdays) {
+                let d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                let expires = 'expires=' + d.toGMTString();
+                cookie = cookie + ' ' + expires;
+            }
+            document.cookie = cookie;
         }
     }
 }
