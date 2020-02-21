@@ -9,6 +9,7 @@
 </template>
 
 <script>
+var utils = require('../utils/index.js');
 export default {
     data () {
         return {
@@ -22,63 +23,24 @@ export default {
         }
     },
     methods: {
-        // 获取客户端IP
-        getClientIp () {
-            this.axios.get('/getClientIP')
-                .then((res) => {
-                    // window.console.log(res.data);
-                    var str = res.data.match(/\{[\S\s]+\}/)[0];
-                    var clientIP = JSON.parse(str).cip;
-                    this.getLocation(clientIP);
-                })
-                .catch((error) => {
-                    window.console.log('ip',error);
-                })
-        },
-        // 获取地理位置
-        getLocation (clientIP) {
-            var ip = clientIP;
-            this.axios({
-                url: '/getLocation',
-                method: 'get',
-                params: {
-                    ip: ip
-                }
-            })
-            .then((res) => {
-                // window.console.log(res.data.data.city);
-                var city = res.data.data.city;
+        async getWeather(that) {
+            //获取ip地址
+            try {
+                var ip = await utils.getClientIp(that);
+                //获取当前用户地址
+                var location = await utils.getLocation(that,ip); 
+                var city = location.city;
+                var weather = await utils.getLocationWeather(that,city);
+                weather.src = require(`@/assets/weatherIcon/${weather.cond_code}.png`);
+                this.weather = weather;
                 this.city = city;
-                this.getLocationWeather(city);
-            })
-            
-        },
-        // //获取当前位置天气情况
-        getLocationWeather (location) {
-            var key = '53d55432520047dbb54f21c0ece5fe89';
-            this.axios({
-                url: '/getWeather',
-                params: {
-                    location: location,
-                    key: key
-                }
-            })
-                .then((res) => {
-                    var result = res.data.HeWeather6[0].now;
-                    result.src =require(`@/assets/weatherIcon/${result.cond_code}.png`);
-                    this.weather = result;
-                    window.console.log(result);
-                })
-                .catch((error) => {
-                    window.console.log(error);
-                })
+            } catch(err) {
+                window.console.log(err);
+            }
         }
-
-
-        
     },
     created () {
-        this.getClientIp();
+       this.getWeather(this); //获取天气
     }
 }
 </script>

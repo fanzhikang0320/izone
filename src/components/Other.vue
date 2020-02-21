@@ -1,64 +1,83 @@
 <template>
     <div class="other-wrapper">
-        <div class="caseInfo-box" @click="onlineView(item.url)" v-for="(item,index) in caseInfo" :key="index">
-            <div class="caseInfo-top">
-                <el-image style="width:100px;height:100px;borderRadius:8px" :src="item.imgUrl" fit="cover">
-                    <!-- 图片未加载占位内容 -->
-                    <div slot="placeholder" style="width:100px;height:100px;display:flex;justifyContent:center;alignItems:center;fontSize:50px;color:#ccc">
-                        <i class="el-icon-loading"></i>
-                    </div>
-                    <!-- 图片加载失败 -->
-                    <div slot="error" class="image-slot" style="width:100px;height:100px;display:flex;justifyContent:center;alignItems:center;fontSize:50px;color:#ccc">
-                        <i class="el-icon-picture-outline"></i>
-                    </div>
-                </el-image>
-                <div class="desc-box">
-                    <h2 class="desc-title">{{item.title}}</h2>
-                    <p class="author">作者：{{item.author}}</p>
-                    <p class="time-box">上传时间：{{item.updateTime}}</p>
-                    <p class="grade-box">评分：
-                        <el-rate
-                            v-model="item.score"
-                            disabled
-                            show-score
-                            text-color="#ff9900"
-                            allow-half
-                        ></el-rate>
-                    </p>
-                    <div class="desc-info">描述：
-                        <div :class="{'info-text': true, 'info-text-more': !item.isShowOpen}">{{item.desc}}
-                            <i class="el-icon-arrow-down down-icon" @click.stop="openMore(index)" v-if="item.isShowOpen && item.isShowMore">展开</i>
-                            <i class="el-icon-arrow-up up-icon" @click.stop="closeMore(index)" v-else-if="item.isShowOpen == false">收起</i>
+        <div class="upload-box">
+
+        </div>
+        <div class="caseInfo-wrapper">
+            <div class="caseInfo-box" @click="onlineView(item.url)" v-for="(item,index) in caseInfo" :key="index">
+                <div class="caseInfo-top">
+                    <el-image style="width:100px;height:100px;borderRadius:8px" :src="item.imgUrl" fit="cover">
+                        <!-- 图片未加载占位内容 -->
+                        <div slot="placeholder" style="width:100px;height:100px;display:flex;justifyContent:center;alignItems:center;fontSize:50px;color:#ccc">
+                            <i class="el-icon-loading"></i>
+                        </div>
+                        <!-- 图片加载失败 -->
+                        <div slot="error" class="image-slot" style="width:100px;height:100px;display:flex;justifyContent:center;alignItems:center;fontSize:50px;color:#ccc">
+                            <i class="el-icon-picture-outline"></i>
+                        </div>
+                    </el-image>
+                    <div class="desc-box">
+                        <h2 class="desc-title">{{item.title}}</h2>
+                        <p class="author">作者：{{item.author}}</p>
+                        <p class="time-box">上传时间：{{item.updateTime}}</p>
+                        <p class="grade-box">评分：
+                            <el-rate
+                                v-model="item.score"
+                                disabled
+                                show-score
+                                text-color="#ff9900"
+                                allow-half
+                            ></el-rate>
+                        </p>
+                        <div class="desc-info">描述：
+                            <div :class="{'info-text': true, 'info-text-more': !item.isShowOpen}">{{item.desc}}
+                                <i class="el-icon-arrow-down down-icon" @click.stop="openMore(index)" v-if="item.isShowOpen && item.isShowMore">展开</i>
+                                <i class="el-icon-arrow-up up-icon" @click.stop="closeMore(index)" v-else-if="item.isShowOpen == false">收起</i>
+                            </div>
                         </div>
                     </div>
+                    <img src="@/assets/img/new.png" alt="最新" class="new" v-if="item.isNew">
                 </div>
-                <img src="@/assets/img/new.png" alt="最新" class="new" v-if="item.isNew">
-            </div>
-            <div class="caseInfo-bottom" @click.stop>
-                <el-popover
-                    placement="bottom"
-                    trigger="click"
-                >
-                    <el-rate v-model="item.initScore" show-text allow-half @change="handleGrade(index)" @click="changeGrade(index)"></el-rate>
-                    <p class="grade" slot="reference"><i class="el-icon-star-off"></i>评分</p>
-                </el-popover>
-                <el-popover
-                    trigger="click"
-                    placement="bottom"
-                >
-                    <img src="@/assets/img/qq.png" alt="qq" title="分享至QQ" style="width:45px;height:45px;cursor:pointer;margin: 0 5px;" @click="shareToQQ(index)">
-                    <img src="@/assets/img/wechat.png" alt="微信" title="分享至微信" style="width:45px;height:45px;cursor:pointer;margin: 0 5px;" @click="shareToWechat(index)">
-                    <img src="@/assets/img/sina.png" alt="新浪微博" title="分享至新浪微博" style="width:45px;height:45px;cursor:pointer;margin: 0 5px;" @click="shareToSina(index)">
-                    <p class="share-box" slot="reference"><i class="el-icon-share"></i>分享</p>
-                </el-popover>
-                
-                <p class="download-box" @click="downloadCode(item.id)"><i class="el-icon-download"></i>下载</p>
-                <p class="views-box" @click="onlineView(item.url)">
-                    <i class="el-icon-monitor"></i>
-                    在线预览
-                </p>
+                <div class="caseInfo-bottom" @click.stop>
+                    <el-popover
+                        placement="bottom"
+                        trigger="click"
+                    >
+                        <el-rate v-model="item.initScore" show-text allow-half @change="handleGrade(index)" @click="changeGrade(index)"></el-rate>
+                        <p class="grade" slot="reference"><i class="el-icon-star-off"></i>评分</p>
+                    </el-popover>
+                    <el-popover
+                        trigger="click"
+                        placement="bottom"
+                    >
+                        <img src="@/assets/img/qq.png" alt="qq" title="分享至QQ" style="width:45px;height:45px;cursor:pointer;margin: 0 5px;" @click="shareToQQ(index)">
+                        <img src="@/assets/img/wechat.png" alt="微信" title="分享至微信" style="width:45px;height:45px;cursor:pointer;margin: 0 5px;" @click="shareToWechat(index)">
+                        <img src="@/assets/img/sina.png" alt="新浪微博" title="分享至新浪微博" style="width:45px;height:45px;cursor:pointer;margin: 0 5px;" @click="shareToSina(index)">
+                        <p class="share-box" slot="reference"><i class="el-icon-share"></i>分享</p>
+                    </el-popover>
+                    
+                    <p class="download-box" @click="downloadCode(item.id)"><i class="el-icon-download"></i>下载</p>
+                    <p class="views-box" @click="onlineView(item.url)">
+                        <i class="el-icon-monitor"></i>
+                        在线预览
+                    </p>
+                </div>
             </div>
         </div>
+       
+        <el-pagination 
+        layout="prev,pager,next" 
+        background 
+        :page-size=pageSize
+        :total=total
+        :hide-on-single-page=true
+        @current-change="pageChange" 
+        @prev-click="prevPageClick"
+        @next-click="nextPageClick"
+        class="pagination"
+        >
+
+        </el-pagination>
     </div>
 </template>
 <script>
@@ -164,7 +183,9 @@ export default {
                     imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
                     isNew: true
                 },
-            ]
+            ],
+            total: 100, //数据的总数量
+            pageSize: 20 //每页展示多少条数据
         }
     },
     computed: {
@@ -211,6 +232,26 @@ export default {
 
             window.console.log(index);
         },
+        // 当前页改变时
+        pageChange(currentPage) {
+            window.console.log(currentPage);
+            this.getData(currentPage);
+        },
+        //点击上一页
+        prevPageClick(currentPage) {
+            window.console.log(currentPage);
+            this.getData(currentPage);
+        },
+        //点击下一页e
+        nextPageClick(currentPage) {
+            window.console.log(currentPage);
+            this.getData(currentPage);
+        },
+        //获取数据
+        getData(currentPage) {
+            window.console.log(currentPage);
+        this.message();
+        },
         message () {
             this.$message({
                 showClose: true,
@@ -224,13 +265,26 @@ export default {
 <style scoped>
 .other-wrapper {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    
     width: 1024px;
     min-width: 1024px;
     background-color: #fff;
     margin: 0 auto;
+}
+.other-wrapper .upload-box {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(61, 240, 45);
+    margin-bottom: 15px;
+}
+.caseInfo-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%
 }
 .other-wrapper p {
     margin: 0;
@@ -317,4 +371,8 @@ export default {
 .caseInfo-bottom .share-box:hover,.download-box:hover,.views-box:hover,.grade:hover{
     color: #49e;
 }
+.pagination {
+    margin: 25px 0 20px 0;
+}
+
 </style>

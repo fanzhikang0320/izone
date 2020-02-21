@@ -20,6 +20,7 @@
 
 <script>
 import axios from 'axios';
+var cookieUtils = require('../utils/cookie.js');
 export default {
     data () {
         var validateAccount = (rule,value,callback) => {
@@ -67,7 +68,7 @@ export default {
                                 that.btnContent = '立即登录';
                                 //是否要种cookie
                                 if (that.checked) {
-                                    that.setCookie('login',true,7);
+                                    cookieUtils.setCookie('login',true,1)
                                 }
                                 window.open('/home','_self');
                                
@@ -93,17 +94,6 @@ export default {
                     return false;
                 }
             })
-        },
-        //设置cookie
-        setCookie (key,value,exdays) {
-            let cookie = key + '=' + value + ';';
-            if (exdays) {
-                let d = new Date();
-                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-                let expires = 'expires=' + d.toGMTString();
-                cookie = cookie + ' ' + expires;
-            }
-            document.cookie = cookie;
         }
     }
 }

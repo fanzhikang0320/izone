@@ -5,6 +5,7 @@
           <el-col :span="5" class="main-left">left</el-col>
           <!-- 中间区域 -->
           <el-col :span="12" class="main-center">
+              <TextEditor />
               <Dynamic/>
           </el-col>
           <!-- 右边区域 -->
@@ -20,6 +21,7 @@
 import UserInfo from '@/components/UserInfo.vue';
 import RankingList from '@/components/RankingList.vue';
 import Dynamic from '@/components/Dynamic.vue';
+import TextEditor from '@/components/TextEditor.vue';
 export default {
     data () {
         return {
@@ -29,7 +31,8 @@ export default {
     components: {
         Dynamic,
         UserInfo,
-        RankingList
+        RankingList,
+        TextEditor
     },
     methods: {
         
