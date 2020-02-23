@@ -1,5 +1,5 @@
 <template>
-    <div id="textarea-wrapper" v-loading.fullscreen.lock="loading">
+    <div class="textarea-wrapper" v-loading.fullscreen.lock="loading">
         <el-input
             type="textarea"
             placeholder="说点什么吧"
@@ -183,8 +183,14 @@ export default {
                 this.$refs.upload.submit();
                 // 判断是不是还有图片要上传
                 if (this.fileList.length == 0) {
-                    this.loading = false
+                    this.loading = false;
+                    //刷新说说
+                     this.$message({
+                        message: '内容发布成功！',
+                        type: 'success'
+                    })
                     this.clearData();
+
                 }
             } else {
                 //上传内容失败或者其它原因，清空所有东西，关闭loading
@@ -206,13 +212,16 @@ export default {
 </script>
 
 <style scoped>
+.textarea-wrapper {
+    background-color: #fff;
+}
 .textarea-bottom {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-top: 7px;
-    /* background-color: green; */
+    
 }
 
 .textarea-bottom .img-box {

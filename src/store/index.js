@@ -5,8 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    locationUserInfo: {
+
+    }
   },
   mutations: {
+    changeLocationUserInfo (state,payload) {
+      state.locationUserInfo = payload;
+    }
   },
   actions: {
   },

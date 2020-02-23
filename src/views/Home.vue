@@ -32,15 +32,17 @@ export default {
 
 <style scoped>
 .container {
-  background-color: gray;
+  /* background-color: gray; */
+  background-color: rgb(233,233,233);
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 .header {
-  background-color: red;
+  /* background-color: red; */
 }
 .main {
-  background-color: blue;
+  /* background-color: blue; */
 }
 .footer {
-  background-color: yellow;
+  /* background-color: yellow; */
 }
 </style>

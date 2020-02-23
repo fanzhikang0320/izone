@@ -10,8 +10,8 @@
           </el-col>
           <!-- 右边区域 -->
           <el-col :span="7" class="main-right">
-              <UserInfo />
-              <RankingList />
+              <UserInfo/>
+              <RankingList/>
           </el-col>
       </el-row>
   </div>
@@ -25,7 +25,7 @@ import TextEditor from '@/components/TextEditor.vue';
 export default {
     data () {
         return {
-            
+            func: ''
         }
     },
     components: {
@@ -35,7 +35,7 @@ export default {
         TextEditor
     },
     methods: {
-        
+       
     }
 
 }
@@ -47,10 +47,9 @@ export default {
     height: 100px;
     margin: 0 auto;
     min-width: 1024px;
-    background-color: #fff;
+    /* background-color: #fff; */
 }
 .main-center {
-    background-color: gray;
 }
 .main-left {
     background-color: pink;

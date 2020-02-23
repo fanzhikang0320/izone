@@ -39,7 +39,7 @@ export default {
   width: 1024px;
   min-width: 1024px;
   height: 60px;
-  background-color: #fff;
+  /* background-color: #fff; */
   margin: 0 auto;
   overflow: hidden;
   display: flex;

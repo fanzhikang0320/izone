@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 var cookieUtils = require('../utils/cookie.js');
 export default {
     data () {
@@ -59,7 +58,7 @@ export default {
                     this.isLoading = true;
                     this.btnContent = '登录中...';
                     let that = this;
-                    axios.post('/api/getlogin',this.ruleForm)
+                    this.axios.post('/api/getlogin',this.ruleForm)
                         .then((res) => {
                             //判断返回结果是否可以登录
                             if (res.data.isLogin) {
@@ -70,6 +69,7 @@ export default {
                                 if (that.checked) {
                                     cookieUtils.setCookie('login',true,1)
                                 }
+                                this.$store.commit('changeLocationUserInfo',{account: this.ruleForm.account})
                                 window.open('/home','_self');
                                
                             } else {
