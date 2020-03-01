@@ -1,19 +1,337 @@
 <template>
   <div class="ranking-wrapper">
       <div class="title-box">
-        <h3 class="title">人气排行榜</h3>
+        <h3 class="title">TOP排行榜</h3>
         <p class="line"></p>
       </div>
-      <div class="ranking-row" v-for="(item,index) in hotInfo" :key="index" @click="handleInfo(item.account)">
-        <div class="ranking-row-left">
-            <img :src="item.headImg" class="headImg">
-            <div :class="{'num': true,'firstHot': index == 0 ,'secondHot': index == 1, 'thirdHot': index == 2}">{{index + 1}}</div>
-        </div>
-        <p class="nickname">{{item.nickname}}</p>
-        <div class="ranking-row-right">
-            <img src="@/assets/img/fire.png" alt="热度" title="热度" class="hotImg">
-            <p class="hotValue">{{item.hotValue > 99999 ? '99999+' : item.hotValue}}</p>
-        </div>
+
+      <div class="ranking-box">
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+            <div class="ranking">
+                <el-tooltip
+                    placement="right-end"
+                    effect="light"
+                >
+                    <div class="ranking-top">
+                        <img src="" alt="" class="headImg">
+                        <div class="user-item">
+                            <span class="nickname">迪丽热Bug</span>
+                            <img src="../assets/img/1.png" alt="" class="cup">
+                        </div>
+                    </div>
+                    <div slot="content" class="user-item-info">
+                        <p>
+                            <span>昵称：迪丽热bug</span>
+                        </p>
+                        <p>
+                            <span>园龄：3个月</span>
+                        </p>
+                        <p>
+                            <span>性别：男</span>
+                        </p>
+                        <p>
+                            <span>地址：河南·周口</span>
+                        </p>
+                        <p>
+                            <span>粉丝人数：19999</span>
+                        </p>
+                    </div>
+                </el-tooltip>
+                <div class="ranking-bottom">
+                    <img src="../assets/img/moods.png" alt="">
+                    <span class="fans">1999</span>
+                </div>
+            </div>
+      </div>
+      <div class="btn-box">
+          <span>
+              <i class="el-icon-arrow-left"></i>
+          </span>
+          <span>
+              <i class="el-icon-arrow-right"></i>
+          </span>
+          <span>
+              <i class="el-icon-more"></i>
+          </span>
       </div>
   </div>
 </template>
@@ -52,36 +370,6 @@ export default {
                     nickname: '迪丽热Bug',
                     headImg: require('@/assets/img/headImg.png'),
                     hotValue: 100000
-                },
-                {
-                    account: '2343555666',
-                    nickname: '前端小学生',
-                    headiImg: require('@/assets/img/headImg.png'),
-                    hotValue: 99999
-                },
-                {
-                    account: '122435345345',
-                    nickname: '杀手不太冷',
-                    headImg: require('@/assets/img/headImg.png'),
-                    hotValue: 88888
-                },
-                {
-                    account: '23343566',
-                    nickname: 'hahahahajaj',
-                    headImg: require('@/assets/img/headImg.png'),
-                    hotValue: '23124'
-                },
-                {
-                    account: '122435345345',
-                    nickname: '杀手不太冷',
-                    headImg: require('@/assets/img/headImg.png'),
-                    hotValue: 88888
-                },
-                {
-                    account: '23343566',
-                    nickname: 'hahahahajaj',
-                    headImg: require('@/assets/img/headImg.png'),
-                    hotValue: '23124'
                 }
             ]
 
@@ -100,11 +388,13 @@ export default {
 
 <style scoped>
 .ranking-wrapper  {
+    float: right;
     margin: 20px auto;
-    width: 280px;
-    background-color:#fff;
-    height: 600px; 
+    width: 260px;
+    background-color: #faf8ff;
     overflow: hidden;
+    border: 1px solid #d2c8e6;
+    border-radius: 4px;
 }
 .ranking-wrapper .title-box {
     position: relative;
@@ -118,7 +408,7 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    background-color: #fff;
+    background-color: #faf8ff;
     margin: 0;
     z-index: 1;
 }
@@ -127,80 +417,105 @@ export default {
     position: absolute;
     width: 100%;
     height: 1px;
-    background-color: gray;
+    background-color: #d2c8e6;
     top: 50%;
     transform: translateY(-50%);
 }
-.ranking-wrapper .ranking-row {
-    height: 50px;
+
+.ranking-wrapper .ranking-box {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0 9px;
-    overflow: hidden;
-    border-bottom: 1px solid rgb(204, 200, 200);
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 1px;
+    min-height: 294px;
+}
+.ranking {
     cursor: pointer;
+    display: inline-block;
+    margin: 3px 5px;
+
+    
 }
-.ranking-wrapper .ranking-row .ranking-row-left {
+.ranking-top {
+    width: 68px;
+    height: 68px;
+    border: 1px solid #d2c8e6;
     position: relative;
-    width: 35px;
-    height: 35px;
-    border: 1px solid rgb(197, 177, 177);
-    border-radius: 6px;
+    border-radius: 5px;
 }
-.ranking-wrapper .ranking-row .ranking-row-left .num {
+.ranking-wrapper .ranking-box .user-item-info {
+    background-color: #d2c8e6;
+}
+.ranking-top .user-item {
     position: absolute;
     bottom: 0;
-    right: 0;
-    font-size: 13px;
-    color: #fff;
-    font-weight: bold;
-    line-height: 15px;
-    text-align: center;
-    width: 15px;
-    height: 15px;
-    background-color: rgb(142,185,245);
-}
-.ranking-wrapper .ranking-row .ranking-row-left .num.firstHot  {
-    background-color: rgb(245,69,69);
-}
-.ranking-wrapper .ranking-row .ranking-row-left .num.secondHot {
-    background-color: rgb(255,133,71);
-}
-.ranking-wrapper .ranking-row .ranking-row-left .num.thirdHot {
-    background-color: rgb(255,172,56);
-}
-
-.ranking-row .ranking-row-left .headImg {
     width: 100%;
-    height: 100%;
+    height: 22px;
+    background-image: linear-gradient(to bottom,transparent,rgba(0,0,0,.7));
+    color: #fff;
+    text-align: center;
 }
-.ranking-row .nickname {
-    width: 100px;
+.ranking-top .user-item .nickname {
+    display: inline-block;
+    font-size: 12px;
+    width: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-weight: bold;
-    margin-left: 15px;
-    font-size: 14px;
 }
-.ranking-row .ranking-row-right {
-    width: 100px;
-}
-.ranking-row .ranking-row-right .hotImg{
+.ranking-top .user-item .cup {
     display: inline-block;
-    vertical-align: middle;
     width: 20px;
     height: 20px;
-    margin-left: 3px;
 }
-.ranking-row .ranking-row-right .hotValue {
-    font-size: 15px;
+.ranking .headImg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 5px;
+    background-color: rgb(177, 164, 160);
+}
+
+.ranking-bottom {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    height: 20px;
+    margin-top: 2px;
+    line-height: 20px;
+    color: #2f2e33
+}
+.ranking-bottom img {
     display: inline-block;
+    width: 20px;
+    height: 20px;
     vertical-align: middle;
-    margin-left: 10px;
-    font-weight: bold;
-    color: #e22323;
+}
+.ranking-bottom span {
+    vertical-align: middle;
+}
+
+.btn-box {
+    height: 25px;
+    padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.btn-box span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 3px 8px 0px 8px;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bolder;
+    font-size: 15px;
+    color: #857a99;
+    cursor: pointer;
+}
+.btn-box span:hover {
+    background-color: #ede9f5;
 }
 </style>

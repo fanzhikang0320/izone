@@ -2,14 +2,17 @@
   <div class="main-wrapper">
       <el-row>
           <!-- 左边区域 -->
-          <el-col :span="5" class="main-left">left</el-col>
+          <el-col :span="5" class="main-left">
+              <BulletinBoard />
+          </el-col>
           <!-- 中间区域 -->
           <el-col :span="12" class="main-center">
-              <TextEditor />
-              <Dynamic/>
+              <TopAD/>
+              <router-view></router-view>
           </el-col>
           <!-- 右边区域 -->
           <el-col :span="7" class="main-right">
+              <TopLeftAD/>
               <UserInfo/>
               <RankingList/>
           </el-col>
@@ -20,8 +23,9 @@
 <script>
 import UserInfo from '@/components/UserInfo.vue';
 import RankingList from '@/components/RankingList.vue';
-import Dynamic from '@/components/Dynamic.vue';
-import TextEditor from '@/components/TextEditor.vue';
+import TopLeftAD from '@/components/TopLeftAD.vue';
+import BulletinBoard from '@/components/BulletinBoard.vue';
+import TopAD from '@/components/TopAD.vue';
 export default {
     data () {
         return {
@@ -29,10 +33,11 @@ export default {
         }
     },
     components: {
-        Dynamic,
         UserInfo,
         RankingList,
-        TextEditor
+        TopLeftAD,
+        TopAD,
+        BulletinBoard
     },
     methods: {
        
@@ -48,8 +53,6 @@ export default {
     margin: 0 auto;
     min-width: 1024px;
     /* background-color: #fff; */
-}
-.main-center {
 }
 .main-left {
     background-color: pink;

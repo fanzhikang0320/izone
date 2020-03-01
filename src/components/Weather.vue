@@ -10,6 +10,7 @@
 
 <script>
 var utils = require('../utils/index.js');
+var session = require('../utils/sessionStorage.js');
 export default {
     data () {
         return {
@@ -34,8 +35,12 @@ export default {
                 weather.src = require(`@/assets/weatherIcon/${weather.cond_code}.png`);
                 this.weather = weather;
                 this.city = city;
+                session.setSessionStorage('region',location.region);
+                session.setSessionStorage('city',location.city);
             } catch(err) {
-                window.console.log(err);
+                //获取位置失败，采用默认位置
+                session.setSessionStorage('region','中国');
+                session.setSessionStorage('city','未知');
             }
         }
     },

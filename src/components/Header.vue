@@ -1,10 +1,10 @@
 <template>
 <div class="wrapper">
     <el-row>
-        <el-col :span="6">
+        <el-col :span="5">
             <Weather></Weather>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="12">
             <el-menu
             :default-active="active"
             mode="horizontal"
@@ -12,7 +12,8 @@
         >
                 <el-menu-item index="home" @click="gotoFirstpage">首页</el-menu-item>
                 <el-menu-item index="diary" @click="gotoDiarypage">成长日记</el-menu-item>
-                <el-menu-item index="other" @click="gotoOtherpage">其它案例</el-menu-item> 
+                <el-menu-item index="other" @click="gotoOtherpage">其它案例</el-menu-item>
+                <el-menu-item index="personCenter" @click="gotoPersonCenter">个人中心</el-menu-item> 
                 <el-menu-item index="about" @click="gotoAboutpage">关于本站</el-menu-item>
             </el-menu>
         </el-col>
@@ -53,6 +54,10 @@ export default {
         //前往关于本站页面
         gotoAboutpage () {
             this.$router.push('/home/aboutpage');
+        },
+        //前往个人中心
+        gotoPersonCenter() {
+            this.$router.push('/home/personCenter');
         }
     },
     mounted () {

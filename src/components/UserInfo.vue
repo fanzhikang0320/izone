@@ -1,81 +1,88 @@
 <template>
   <div class="userInfo-wrapper">
-      <div class="userInfo-area" v-if="isLogin">
-            <el-image :src="userInfo.headImg" :preview-src-list="userInfo.headImgList" :title="userInfo.account" class="head-img"></el-image>
+      <div class="userInfo-area">
+            <img :src="'/api/getImgData?path=' + userInfo.imgpath" :title="userInfo.account" class="head-img">
             <p class="nickname" :title="userInfo.nickname">{{userInfo.nickname}}</p>
             <div class="probobly-info">
                 <div class="user-age">
-                    <i class="el-icon-male male-icon" v-if="userInfo.sex == 1"></i>
-                    <i class="el-icon-female female-icon" v-else-if="userInfo.sex == 0"></i>
-                    21岁
+                    <i class="el-icon-male male-icon" v-if="userInfo.sex == '1'"></i>
+                    <i class="el-icon-female female-icon" v-else-if="userInfo.sex == '0'"></i>
+                    {{getAge(userInfo.birthday)}}岁
                 </div>
                 <i class="el-icon-minus minus-icon"></i>
                 <div>
                     <i class="el-icon-location-outline"></i>
-                    中国·{{userInfo.city}}
+                    {{userInfo.region}}·{{userInfo.city}}
                 </div>
             </div>
             <div class="hurdle">
-                <div><i class="el-icon-user-solid"></i>个人中心</div>
-                <div><i class="el-icon-star-on"></i>我的关注</div>
-                <div><i class="el-icon-chat-line-square"></i>留言板</div>
-                <div><i class="el-icon-delete"></i>退出账号</div>
+                <router-link :to="{name: 'myfocus'}" tag="div"><i class="el-icon-star-off"></i>我的关注</router-link>
+                <router-link to="/login" tag="div" @click="logOut"><i class="el-icon-delete"></i>退出账号</router-link>
             </div>
-        </div>
-        <div class="login-area" v-else>
-            <img src="@/assets/img/headImg.png" class="head-img">
-            <p class="nickname">Hi！你好</p>
-            <el-button round class="button" @click="gotoRegister">马上注册</el-button>
-            <el-button round class="button" @click="gotoLogin">立即登录</el-button>
         </div>
   </div>
 </template>
 
 <script>
+var cookieUtil = require('../utils/cookie.js');
 export default {
     data () {
         return {
-            isLogin: true, //判断是否登录
-            userInfo: {
-                account: '12345678901',
-                nickname: '迪丽热Bug',
-                headImg: require('@/assets/img/headImg.png'),
-                headImgList: [require('@/assets/img/headImg.png')],
-                sex: 0,
-                age: 21,
-                city: '周口'
-            }
+            userInfo: {},
+            locationAccount: cookieUtil.getCookie('account') //获取本地登录cookie账号
         }
     },
     methods: {
-        //跳转至注册页面
-        gotoRegister () {
-            window.open('/register','_self');
+        //获取用户信息
+        async getUserInfo() {
+            var res = await this.axios.get('/api/getUserInfo',{params: {account: this.locationAccount}});
+            if (res.data.type == 'success') {
+                this.userInfo = res.data.userInfoData[0];
+                // this.userInfo.headImgList = ['/api/getImgData?path=' + this.userInfo.imgpath];
+                this.$store.commit('changeLocationUserInfo',this.userInfo);
+                window.console.log(this.userInfo);
+            }
+            
         },
-        //跳转至登录页面
-        gotoLogin () {
-            window.open('/login','_self');
+        getAge(time) {
+            var date = new Date(time);
+            var birthdayYear = date.getFullYear();
+            var nowYear = new Date().getFullYear();
+            return nowYear - birthdayYear;
+
+        },
+        //退出登录，清除cookie
+        logOut() {
+            cookieUtil.deleteCookie('account')
         }
+    },
+    created() {
+        this.getUserInfo();
     }
 
 }
 </script>
 
 <style scoped>
-.login-area,.userInfo-area{
+.userInfo-wrapper {
+    float: right;
+    background-color: rgb(250,248,255);
+    border: 1px solid #d2c8e6;
+    border-radius: 4px;
+}
+.userInfo-area{
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    width: 280px;
-    background-color: #fff;
+    width: 260px;
     align-items: center;
     padding-top: 20px;
     padding-bottom: 15px;
 }
 .head-img {
-    width: 60px;
-    height: 60px;
-    border: 1px solid #000;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #D1D4DB;
     border-radius: 8px;
 }
 .nickname {
@@ -99,6 +106,7 @@ export default {
     flex-direction: row;
     justify-content: space-around;
     margin: 5px 0;
+    color: #827e8c;
 }
 .probobly-info .minus-icon {
     transform: rotateZ(90deg);
@@ -121,5 +129,9 @@ export default {
     width: 100px;
     margin: 8px 10px;
     text-align: center;
+    cursor: pointer;
+}
+.hurdle div:hover {
+    color: #409eff;
 }
 </style>

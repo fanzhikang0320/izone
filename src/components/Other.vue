@@ -294,7 +294,8 @@ export default {
     width: 480px;
     height: 200px;
     margin: 15px;
-    border: 1px solid gray;
+    border: 1px solid #d2c8e6;
+    border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
 }
@@ -318,7 +319,7 @@ export default {
     font-size: 13px;
     width: 320px;
     height: 170px;
-    background-color: #fff;
+    /* background-color: rgb(184, 62, 62); */
 }
 .caseInfo-top .desc-box p{
     margin: 5px 0;
@@ -349,7 +350,7 @@ export default {
     width: 280px;
     height: 42px;
     line-height: 20px;
-    background-color: #fff;
+    /* background-color: #fff; */
     overflow: hidden;
     word-wrap: break-word;
     position: relative;
@@ -358,12 +359,15 @@ export default {
     height: auto;
 }
 
+
+/* 底部 ------------------*/
 .caseInfo-bottom {
     display: flex;
     justify-content: space-around;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #d2c8e6;
     padding: 5px 0;
     font-size: 14px;
+    color: #827e8c;
 }
 .caseInfo-bottom i {
     margin-right: 2px;

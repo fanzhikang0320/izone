@@ -51,7 +51,7 @@ export default {
         }
     },
     methods: {
-        formSubmit () {
+        async formSubmit () {
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
                     //校验成功,开启loading，发送请求，成功关闭loading，跳转，失败关闭loading，弹框
@@ -67,9 +67,8 @@ export default {
                                 that.btnContent = '立即登录';
                                 //是否要种cookie
                                 if (that.checked) {
-                                    cookieUtils.setCookie('login',true,1)
+                                    cookieUtils.setCookie('account',this.ruleForm.account,1)
                                 }
-                                this.$store.commit('changeLocationUserInfo',{account: this.ruleForm.account})
                                 window.open('/home','_self');
                                
                             } else {

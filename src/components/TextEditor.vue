@@ -42,14 +42,15 @@
             </div>
             <div class="btn-box">
                 <el-button type="info" size="mini" @click="clearData">清空</el-button>
-                <el-button type="primary" size="mini" @click="sendMsg">发送</el-button>
+                <el-button type="primary" size="mini" @click="sendMsg">发表</el-button>
             </div>
         </div>
     </div>
 </template>
 <script>
-var utils = require('../utils/index.js');
+// var utils = require('../utils/index.js');
 var cookieFun = require('../utils/cookie.js');
+var session = require('../utils/sessionStorage.js');
 export default {
     data() {
         return {
@@ -161,18 +162,9 @@ export default {
             
             //开启loading
             this.loading = true;
-            //处理地址问题
-            try {
-                var ip = await utils.getClientIp(this);
-                // //获取当前用户详细地址
-                var location = await utils.getLocation(this,ip);
-                this.dynamicInfo.city = location.city;
-                this.dynamicInfo.region = location.region;
-            } catch(err) {
-                //获取位置失败，采用默认位置
-                this.dynamicInfo.city = '未知';
-                this.dynamicInfo.region = '中国';
-            }
+            //从缓存中获取地理位置
+            this.dynamicInfo.region = session.getSessionStorage('region');
+            this.dynamicInfo.city = session.getSessionStorage('city');
             //将说说内容和城市发送给后端
             var res = await this.axios.post('/api/dynamicInfo',this.dynamicInfo);
 
@@ -214,6 +206,7 @@ export default {
 <style scoped>
 .textarea-wrapper {
     background-color: #fff;
+    margin-bottom: 20px;
 }
 .textarea-bottom {
     display: flex;
@@ -234,7 +227,7 @@ export default {
     position: relative;
 }
 .textarea-bottom .img-box .upload-box .imgInfo {
-    background-color: #fff;
+    background-color: #faf8ff;
     width: 100px;
     list-style: none;
     position: absolute;
@@ -242,6 +235,8 @@ export default {
     padding: 0;
     margin: 0;
     font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #d2c8e6;
 }
 .textarea-bottom .img-box .upload-box .imgInfo::after {
     position: absolute;
@@ -253,7 +248,7 @@ export default {
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 5px solid #fff;
+    border-bottom: 5px solid #d2c8e6;
     border-top: 5px solid transparent;
 }
 .textarea-bottom .img-box .upload-box .imgInfo  li {
@@ -261,13 +256,18 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2px;
+    padding: 3px 5px;
+    color: #827e8c;
+
+}
+.textarea-bottom .img-box .upload-box .imgInfo  li:hover {
+    background-color: #e3ddf0;
+    cursor: pointer;
 }
 .textarea-bottom .img-box .upload-box .imgInfo .text {
     margin: 0;
     padding: 0;
     width: 80px;
-    background-color: gray;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -276,6 +276,7 @@ export default {
 }
 .textarea-bottom .img-box .upload-box .imgInfo .close-icon {
     cursor: pointer;
+    color: rgb(129,120,170);
 }
 .textarea-bottom .img-box img {
     display: inline-block;

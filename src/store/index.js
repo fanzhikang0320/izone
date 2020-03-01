@@ -5,9 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    locationUserInfo: {
-
-    }
+    locationUserInfo: {}
   },
   mutations: {
     changeLocationUserInfo (state,payload) {
@@ -15,6 +13,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    
   },
   modules: {
   }
