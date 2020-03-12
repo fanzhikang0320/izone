@@ -54,11 +54,7 @@ export default {
     min-width: 1024px;
     /* background-color: #fff; */
 }
-.main-left {
-    background-color: pink;
-}
-.main-right {
-    background-color: aqua;
-}
+
+
 
 </style>

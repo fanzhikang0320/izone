@@ -1,6 +1,9 @@
 <template>
     <div class="wrapper">
         <div class="form-container">
+            <div class="logo-box">
+                <img src="../assets/img/loginLogo.png" alt="">
+            </div>
             <el-form :model="formData" :rules="rules" ref="ruleForm" label-position="right" label-width="80px" status-icon>
                 <el-form-item label="昵称" prop="nickname">
                     <el-input type="text" v-model="formData.nickname" placeholder="请输入不超过12位字符"></el-input>
@@ -38,7 +41,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+var utils = require('../utils/index.js');
+
 export default {
     data: function() {
         var validateName = (rule,value,callback) => {
@@ -109,7 +113,9 @@ export default {
                 confirmPassword: '',
                 validateCode: '',
                 birthday: '',
-                sex: 1
+                sex: 1,
+                region: '',
+                city: ''
             },
             rules: {
                 nickname: [{validator: validateName}],
@@ -121,7 +127,8 @@ export default {
             },
             buttonContent: '获取验证码',
             isLoading: false, //控制验证码的loading
-            code: '' //验证码
+            code: '', //验证码
+            location: '' //当前用户注册时所在的地址
         };
     },
     methods: {
@@ -136,9 +143,11 @@ export default {
                         spinner: 'el-icon-loading',
                         background: 'rgba(0,0,0,0.7)'
                     });
+                    this.formData.region = this.location.region;
+                    this.formData.city = this.location.city;
                     //向服务器发送表单数据,验证账号是否已被注册
                     var that = this;
-                    axios.post('/api/register',this.formData)
+                    this.axios.post('/api/register',this.formData)
                         .then(function (res) {
                             loading.close(); //关闭加载
                             if (res.data.isRegister) {
@@ -190,7 +199,7 @@ export default {
             this.buttonContent = '正在获取';
             var that = this;
             //请求验证码
-            axios.get('/api/getcode')
+            this.axios.get('/api/getcode')
                 .then((res) => {
                     that.code = res.data.code;
                     this.$notify({
@@ -205,10 +214,22 @@ export default {
                 .catch((err) => {
                     window.console.log(err);
                 })
+        },
+        async getCity() {
+            var ip = await utils.getClientIp(this);
+            var location = await utils.getLocation(this,ip)
+            if (Object.keys(location).length == 0) {
+                location.region = '中国',
+                location.city = '未知'
+            }
+            this.location = location;
         }
         
     },
-    
+    created() {
+        this.getCity();
+        
+    }
 
 }
 </script>
@@ -222,8 +243,18 @@ export default {
     margin: 0 auto;
     width: 400px;
     padding: 20px;
-    border: 1px solid #000;
+    border: 1px dashed rgb(202, 198, 198);
+    background-color: #fef3dfc7;
+    border-radius: 6px;
+    margin-top: 60px;
 
+}
+.logo-box {
+    margin-bottom: 50px;
+}
+.logo-box img{
+    display: block;
+    margin: 0 auto;
 }
 .code {
     width: 135px;

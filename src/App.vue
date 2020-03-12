@@ -7,26 +7,7 @@
 <script>
 
 export default {
-  name: 'app',
-  // components: {
-  //   //引用局部组件
-  // },
-  // //当前组件使用的数据
-  // data () {
-  //   return {
-  //     name: 'hahaha'
-  //   }
-  // },
-  // methods: {
-  //   //写方法
-  // },
-  // computed: {
-  //   //计算属性
-  // },
-  // //生命周期
-  // created: {
-
-  // }
+  name: 'app'
 }
 </script>
 
@@ -37,6 +18,14 @@ html,body {
   background-color: #f8f8f8;
   margin: 0;
   padding: 0;
+  min-height: 100%;
+  /* background-color: rgb(233,233,233); */
+ 
 }
-
+#app {
+  height: 100%;
+  background-image: url('./assets/img/bg.jpg');
+  overflow: auto;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
 </style>

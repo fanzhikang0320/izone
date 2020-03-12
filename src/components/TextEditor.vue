@@ -48,10 +48,10 @@
     </div>
 </template>
 <script>
-// var utils = require('../utils/index.js');
-var cookieFun = require('../utils/cookie.js');
+// var cookieFun = require('../utils/cookie.js');
 var session = require('../utils/sessionStorage.js');
 export default {
+    
     data() {
         return {
             dynamicInfo: {
@@ -64,15 +64,13 @@ export default {
                 dynamic_id: ''
             },
             rows: 4, //最多显示几行
-            limit: 9, //配置最多可以上传几张图片
+            limit: 6, //配置最多可以上传几张图片
             fileList: [],
             loading: false
             
         }
     },
     methods: {
-        
-
         //文本框聚焦，主要是改变展示区域的样式
         handleFocus() {
         },
@@ -105,7 +103,7 @@ export default {
             this.dynamicInfo.content =  '';
             this.fileList = [];
         },
-        // 上传之后的响应,关闭loading，只要有响应就清空之前的所有内容
+        // 图片上传之后的响应,关闭loading，只要有响应就清空之前的所有内容
         uploadSuccess(result) {
             this.loading = false;
             // 上传成功提示信息
@@ -130,19 +128,22 @@ export default {
            this.$confirm('图片上传失败！请稍后重新编辑再试！','提示',{
                     showCancelButton: false,
                     type: 'warning'
+                }).then(() => {
+                     //将已经写入数据库的东西根据id在重新删掉
+                    this.axios.post('/api/deleteDynamicInfo',this.msg)
+                    this.clearData();
                 })
-            //将已经写入数据库的东西根据id在重新删掉
-            this.axios.post('/api/deleteDynamicInfo',this.msg)
-            this.clearData();
+           
         },
         //点击发表时，发送请求，将图片还有文字外加地址一起发送，开启loading
         async sendMsg() {
-            var account = cookieFun.getCookie('account');
+            var account = session.getSessionStorage('account');
             //先判断有没有登录
             if (!account) {
                 this.$confirm('请您登录账号以后在进行发布！','提示',{
                     showCancelButton: false,
-                    type: 'warning'
+                    type: 'warning',
+                    showClose: false
                 }).then(() => {
                     this.clearData();
                 })
@@ -155,7 +156,10 @@ export default {
             if (this.fileList.length == 0 && this.dynamicInfo.content.trim() == '') {
                 this.$confirm('请您编辑文字或图片后发布！','提示',{
                     showCancelButton: false,
-                    type: 'warning'
+                    type: 'warning',
+                    showClose: false
+                }).then(() => {
+
                 })
                 return;
             }
@@ -171,6 +175,15 @@ export default {
             if (res.data.type === 'success') {
                 // 将返回的当前说说id，再次抛送给后台，关闭loading
                 this.msg.dynamic_id = res.data.dynamic_id;
+
+                // 根据这个id在把它取出来，用于更新本地显示的内容
+                this.axios.get('/api/getOneDynamicInfo',{params: {dynamic_id: res.data.dynamic_id}})
+                    .then((res) => {
+                        if (res.data.type == 'success') {
+                            // res.data.data
+                            this.$emit('changeData',res.data.data[0])
+                        }
+                    })
                 //提交图片
                 this.$refs.upload.submit();
                 // 判断是不是还有图片要上传
@@ -182,7 +195,6 @@ export default {
                         type: 'success'
                     })
                     this.clearData();
-
                 }
             } else {
                 //上传内容失败或者其它原因，清空所有东西，关闭loading
@@ -213,7 +225,11 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-top: 7px;
+    background-color: #fef2da99;
+    border: 1px solid #feefda;
+    border-top: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
     
 }
 

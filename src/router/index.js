@@ -4,12 +4,15 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue';
 import Main from '@/components/Main.vue';
 import TextAndDynamic from '@/components/TextAndDynamic.vue'
-import Dynamic from '@/components/Dynamic.vue';
+import MyFocus from '@/components/MyFocus.vue'
+import Msg from '@/components/Msg.vue'
+import SearchDynamic from '@/components/SearchDynamic.vue'
 Vue.use(VueRouter)
 const secondRoutes = [
   {
     path:'firstpage',
     component: Main,
+    name: 'firstpage',
     redirect: 'firstpage/TextAndDynamic',
     children: [
       {
@@ -20,25 +23,33 @@ const secondRoutes = [
       {
         path: 'myfocus',
         name: 'myfocus',
-        component: Dynamic
+        component: MyFocus
       },
       {
         path: 'msg',
         name: 'msg',
-        component: import ('@/components/Msg.vue')
+        component: Msg
+      },
+      {
+        path: 'search',
+        name: 'search',
+        component: SearchDynamic
       }
     ]
   },
   {
     path: 'diarypage',
+    name: 'diarypage',
     component: () => import ('@/components/Diary.vue')
   },
   {
     path: 'otherpage',
+    name: 'otherpage',
     component: () => import ('@/components/Other.vue')
   },
   {
     path: 'aboutpage',
+    name: 'aboutpage',
     component: () => import ('@/components/About.vue')
   },
   {
@@ -50,7 +61,7 @@ const secondRoutes = [
       {
         path: 'mydynamic',
         name: 'mydynamic',
-        component: () => import ('@/components/TextAndDynamic.vue')
+        component: () => import ('@/components/CenterTextAndDynamic.vue')
       },
       {
         path: 'messageBoard',
@@ -63,20 +74,23 @@ const secondRoutes = [
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/home',
     component: Home,
+    name: 'home',
     redirect: 'home/firstpage',
     children: secondRoutes
   },
   {
     path: '/login',
+    name: 'login',
     component: () => import ('@/views/Login.vue')
   },
   {
     path: '/register',
+    name: 'register',
     component: () => import ('@/views/Register.vue')
   },
   {

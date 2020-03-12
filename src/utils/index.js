@@ -28,7 +28,6 @@ async function getLocation (that,ip) {
         var pro = await that.axios({url: '/getLocation',method: 'get',params: {ip: ip}});
         location = pro.data.data
     } catch(err) {
-        window.console.log(err);
         return location
     }
     return location;

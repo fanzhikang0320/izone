@@ -1,205 +1,219 @@
 <template>
-    <div :class="{'dynamic-wrapper': true,'placeholder': dynamicInfo.length == 0 }">
+    <div class="dynamic-wrapper" >
         
         <!-- 有数据的时候显示 -->
-        <div v-for="(item,index) in dynamicInfo" :key="index" class="dynamicInfo-box">
-            <!-- 说说顶部区域 -->
-            <div class="dynamic-top" @click="gotoDetail(index)">
-                <img :src="'/api/getImgData?path=' + item.userInfoData.imgpath" class="headImg">
-                <div class="top-center">
-                    <p class="nickname">{{item.userInfoData.nickname}}</p>
-                    <div class="time-box">
-                        <p class="time"><i class="el-icon-time time-icon"></i>{{getTime(item.ctime)}}</p>
-                        <p class="funs-box">
-                            <img src="@/assets/img/fans.png" :title="'粉丝量：' + item.userInfoData.fans" class="funs-img">
-                            {{item.userInfoData.fans}}
-                        </p>
+        <div v-if="dynamicInfo.length != 0">
+            <div v-for="(item,index) in dynamicInfo" :key="index" class="dynamicInfo-box">
+                <!-- 说说顶部区域 -->
+                <div class="dynamic-top" @click="gotoDetail(index)">
+                    <img :src="'/api/getImgData?path=' + item.userInfoData.imgpath" class="headImg">
+                    <div class="top-center">
+                        <p class="nickname">{{item.userInfoData.nickname}}</p>
+                        <div class="time-box">
+                            <p class="time"><i class="el-icon-time time-icon"></i>{{getTime(item.ctime)}}</p>
+                            <p class="funs-box">
+                                <img src="@/assets/img/fans.png" :title="'粉丝量：' + item.userInfoData.fans" class="funs-img">
+                                {{item.userInfoData.fans}}
+                            </p>
+                        </div>
                     </div>
+                    <div class="attention-btn-box" v-if="item.isShowAttention">
+                        <button class="attention-btn" v-if="item.isAttention" @click.stop="handleAttention(item.account,index)"><i class="el-icon-plus plus-icon"></i>关注</button>
+                        <button class="attention-btn" v-else @click.stop="handleCancelAttention(item.account,index)"><i class="el-icon-check check-icon"></i>已关注</button>
+                    </div>
+                
+                    <i class="el-icon-close close-icon" v-if="item.isShowRemove" @click.stop="removeCard(item.id,index)"></i>
                 </div>
-                <div class="attention-btn-box" v-if="item.isShowAttention">
-                    <button class="attention-btn" v-if="item.isAttention" @click.stop="handleAttention(item.account,index)"><i class="el-icon-plus plus-icon"></i>关注</button>
-                    <button class="attention-btn" v-else @click.stop="handleCancelAttention(item.account,index)"><i class="el-icon-check check-icon"></i>已关注</button>
-                </div>
-               
-                <i class="el-icon-close close-icon" v-if="item.isShowRemove" @click.stop="removeCard(item.id,index)"></i>
-            </div>
 
-            <!-- 说说中间内容区 -->
-            <div class="dynamic-middle" @click.stop>
-                <div class="dynamic-text" ref="textBox" v-if="item.content != ''">
-                    <div class="text">{{item.content}}</div>
-                </div>
-                <div class="dynamic-img-box" @click.stop v-if="item.imgList.length != 0">
-                    <!-- 图片为一张的时候 -->
-                    <el-image v-if="item.imgList.length == 1" lazy :preview-src-list="item.imgList" :src="item.imgList[0]" style="width:240px;height:320px">
-                        <!-- 图片未加载之前的占位内容 -->
-                        <div slot="placeholder" style="width:240px;height:320px;font-size:50px;backgroundColor:#ccc">
-                            <i class="el-icon-loading"></i>
-                        </div>
-                        <!-- 图片加载显示失败 -->
-                        <div slot="error" style="width:240px;height:320px;font-size:50px;backgroundColor:#ccc">
-                            <i class="el-icon-picture-outline"></i>
-                        </div>
-                    </el-image>
-                    <!-- 当图片显示多张的时候 -->
-                    <el-image  v-else :src="img" class="dynamic-img" fit="cover" lazy :preview-src-list="item.imgList" v-for="(img,index) in item.imgList" :key="index">
-                        <!-- 图片未加载之前的占位内容 -->
-                        <div slot="placeholder" style="width:155px;height:155px;font-size:50px;backgroundColor:#ccc">
-                            <i class="el-icon-loading"></i>
-                        </div>
-                        <!-- 图片加载显示失败 -->
-                        <div slot="error" style="width:155px;height:155px;font-size:50px;backgroundColor:#ccc">
-                            <i class="el-icon-picture-outline"></i>
-                        </div>
-                    </el-image>
-                    <!-- 当图片的数量大于六张的时候 -->
-                    <div class="img-more" v-if="item.imgList.length > 6" title="点击查看详情" @click.stop="gotoDetail(index)">
-                        <i class="el-icon-plus plus-icon"></i>
+                <!-- 说说中间内容区 -->
+                <div class="dynamic-middle" @click.stop>
+                    <div class="dynamic-text" ref="textBox" v-if="item.content != ''">
+                        <div class="text">{{item.content}}</div>
                     </div>
-                </div>
-            </div>
-            <!-- 说说底部区域 -->
-            <div class="dynamic-bottom" @click.stop>
-                <div class="location">
-                    <i class="el-icon-map-location" title="地点" @click="handleMap"></i>
-                    <p class="city">{{item.region}}·{{item.city}}</p>
-                </div>
-                <div class="views">
-                    <i class="el-icon-view" title="浏览量"></i>
-                    <p class="views-num">{{item.views > 9999 ? '9999+' : item.views}}</p>
-                </div>
-                 <el-popover
-                        width="300"
-                        trigger="click"
-                        placement="bottom"
-                        v-model="item.visible"
-                        class="talk-popover"
-                    >
-                    <div class="talks" slot="reference">
-                        <i class="el-icon-chat-dot-round" title="评论"></i>
-                        <p class="talks-num">{{item.talks > 9999 ? '9999+' : item.talks}}</p>
-                    </div>
-
-                    <el-input type="textarea"  placeholder="请输入评论内容" v-model="item.talkContent" maxlength="35" show-word-limit></el-input>
-                    <div class="button-box" style="marginTop: 10px;text-align: right;">
-                        <el-button type="info" size="mini" @click="cancelTalk(index)">取消</el-button>
-                        <el-button type="primary" size="mini" @click="talks(index,item.id)">发表</el-button>
-                    </div>
-                    
-                </el-popover>
-                <div class="praise">
-                    <img src="@/assets/img/like.png" alt="" title='取消赞' class="praise-img" @click="cancelPraise(item.id,index)" v-if="item.isLike">
-                    <img src="@/assets/img/nolike.png" alt="" class="praise-img" title="点赞" @click="handlePraise(item.id,index)" v-else>
-                    <p class="praise-num">{{item.praise > 9999 ? '9999+' : item.praise}}</p>
-                </div>
-            </div>
-            <!-- 评论区 -->
-            <div class="talks-box">
-               <div v-if="item.talksArray.length != 0">
-                    <div class="reply-box" v-for="(talksItem,talksIndex) in item.talksArray" :key="talksIndex">
-                        <!-- 一级评论 -->
-                        <div class="reply-item">
-                            <img :src="'/api/getImgData?path=' + talksItem.imgpath" alt="">
-                            <div class="reply-item-right">
-                                <div>
-                                    <span class="nickname">{{talksItem.parentNickname}}</span>
-                                    <span>：</span>
-                                    <p class="time-box">{{getTime(talksItem.ctime)}}</p>
-                                </div>
-                                <el-tooltip placement="bottom-start" effect="light">
-                                    <span class="reply-content">{{talksItem.content}}</span>
-                                    <div slot="content" style="color:#1c87eb;">
-                                        <span type="text" @click="reply(index,talksIndex)" size="mini" style="margin-right: 8px;cursor:pointer;">回复</span>
-                                        <span type="text" size="mini" style="cursor:pointer;">举报</span>
-                                    </div>
-                                </el-tooltip>
+                    <div class="dynamic-img-box" @click.stop v-if="item.imgList.length != 0">
+                        <!-- 图片为一张的时候 -->
+                        <el-image v-if="item.imgList.length == 1" lazy :preview-src-list="item.imgList" :src="item.imgList[0]" style="width:240px;height:320px">
+                            <!-- 图片未加载之前的占位内容 -->
+                            <div slot="placeholder" style="width:240px;height:320px;font-size:50px;backgroundColor:#ccc">
+                                <i class="el-icon-loading"></i>
                             </div>
+                            <!-- 图片加载显示失败 -->
+                            <div slot="error" style="width:240px;height:320px;font-size:50px;backgroundColor:#ccc">
+                                <i class="el-icon-picture-outline"></i>
+                            </div>
+                        </el-image>
+                        <!-- 当图片显示多张的时候 -->
+                        <el-image  v-else :src="img" class="dynamic-img" fit="cover" lazy :preview-src-list="item.imgList" v-for="(img,index) in item.imgList" :key="index">
+                            <!-- 图片未加载之前的占位内容 -->
+                            <div slot="placeholder" style="width:155px;height:155px;font-size:50px;backgroundColor:#ccc">
+                                <i class="el-icon-loading"></i>
+                            </div>
+                            <!-- 图片加载显示失败 -->
+                            <div slot="error" style="width:155px;height:155px;font-size:50px;backgroundColor:#ccc">
+                                <i class="el-icon-picture-outline"></i>
+                            </div>
+                        </el-image>
+                        <!-- 当图片的数量大于六张的时候 -->
+                        <div class="img-more" v-if="item.imgList.length > 6" title="点击查看详情" @click.stop="gotoDetail(index)">
+                            <i class="el-icon-plus plus-icon"></i>
                         </div>
-                        <!-- 回复区 -->
-                        <div v-if="talksItem.replyArray.length != 0">
-                            <div class="reply-item reply-c"  v-for="(replyItem,replyIndex) in talksItem.replyArray" :key="replyIndex">
-                                <img :src="'/api/getImgData?path=' + replyItem.parentImgpath" alt="">
+                    </div>
+                </div>
+                <!-- 说说底部区域 -->
+                <div class="dynamic-bottom" @click.stop>
+                    <div class="location">
+                        <i class="el-icon-map-location" title="地点" @click="handleMap"></i>
+                        <p class="city">{{item.region}}·{{item.city}}</p>
+                    </div>
+                    <div class="views">
+                        <i class="el-icon-view" title="浏览量"></i>
+                        <p class="views-num">{{item.views > 9999 ? '9999+' : item.views}}</p>
+                    </div>
+                    <el-popover
+                            width="300"
+                            trigger="click"
+                            placement="bottom"
+                            v-model="item.visible"
+                            class="talk-popover"
+                        >
+                        <div class="talks" slot="reference">
+                            <i class="el-icon-chat-dot-round" title="评论"></i>
+                            <p class="talks-num">{{item.talks > 9999 ? '9999+' : item.talks}}</p>
+                        </div>
+
+                        <el-input type="textarea"  placeholder="请输入评论内容" v-model="item.talkContent" maxlength="35" show-word-limit></el-input>
+                        <div class="button-box" style="marginTop: 10px;text-align: right;">
+                            <el-button type="info" size="mini" @click="cancelTalk(index)">取消</el-button>
+                            <el-button type="primary" size="mini" @click="talks(index,item.id)">发表</el-button>
+                        </div>
+                        
+                    </el-popover>
+                    <div class="praise">
+                        <img src="@/assets/img/like.png" alt="" title='取消赞' class="praise-img" @click="cancelPraise(item.id,index)" v-if="item.isLike">
+                        <img src="@/assets/img/nolike.png" alt="" class="praise-img" title="点赞" @click="handlePraise(item.id,index)" v-else>
+                        <p class="praise-num">{{item.praise > 9999 ? '9999+' : item.praise}}</p>
+                    </div>
+                </div>
+                <!-- 评论区 -->
+                <div class="talks-box">
+                    <div v-if="item.talksArray.length != 0">
+                        <div class="reply-box" v-for="(talksItem,talksIndex) in item.talksArray" :key="talksIndex">
+                            <!-- 一级评论 -->
+                            <div class="reply-item">
+                                <img :src="'/api/getImgData?path=' + talksItem.imgpath" alt="">
                                 <div class="reply-item-right">
                                     <div>
-                                        <span class="nickname">{{replyItem.parentNickname}}</span>
-                                        <span class="reply">回复</span>
-                                        <span class="nickname">{{replyItem.childNickname}}</span>
+                                        <span class="nickname">{{talksItem.parentNickname}}</span>
                                         <span>：</span>
-                                        <p class="time-box">{{getTime(replyItem.ctime)}}</p>
+                                        <p class="time-box">{{getTime(talksItem.ctime)}}</p>
                                     </div>
-                                    <el-tooltip
-                                        placement="bottom-start"
-                                        effect="light"
-                                    >
-                                        <span class="reply-content">{{replyItem.content}}</span>
+                                    <el-tooltip placement="bottom-start" effect="light">
+                                        <span class="reply-content">{{talksItem.content}}</span>
                                         <div slot="content" style="color:#1c87eb;">
-                                            <span type="text" @click="reply(index,talksIndex,replyIndex)" size="mini" style="margin-right: 8px;cursor:pointer;">回复</span>
-                                            <span type="text" size="mini" style="cursor:pointer;">举报</span>
+                                            <span type="text" @click="reply(index,talksIndex)" size="mini" style="margin-right: 8px;cursor:pointer;">回复</span>
+                                            <!-- <span type="text" size="mini" style="cursor:pointer;">举报</span> -->
                                         </div>
                                     </el-tooltip>
                                 </div>
                             </div>
+                            <!-- 回复区 -->
+                            <div v-if="talksItem.replyArray.length != 0">
+                                <div class="reply-item reply-c"  v-for="(replyItem,replyIndex) in talksItem.replyArray" :key="replyIndex">
+                                    <img :src="'/api/getImgData?path=' + replyItem.parentImgpath" alt="">
+                                    <div class="reply-item-right">
+                                        <div>
+                                            <span class="nickname">{{replyItem.parentNickname}}</span>
+                                            <span class="reply">回复</span>
+                                            <span class="nickname">{{replyItem.childNickname}}</span>
+                                            <span>：</span>
+                                            <p class="time-box">{{getTime(replyItem.ctime)}}</p>
+                                        </div>
+                                        <el-tooltip
+                                            placement="bottom-start"
+                                            effect="light"
+                                        >
+                                            <span class="reply-content">{{replyItem.content}}</span>
+                                            <div slot="content" style="color:#1c87eb;">
+                                                <span type="text" @click="reply(index,talksIndex,replyIndex)" size="mini" style="margin-right: 8px;cursor:pointer;">回复</span>
+                                                <!-- <span type="text" size="mini" style="cursor:pointer;">举报</span> -->
+                                            </div>
+                                        </el-tooltip>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                       
+                    </div>
+                    <div class="more-reply-box" v-if="item.isLoadTalk">
+                        <span>正在加载评论...<i class="el-icon-loading"></i></span>
+                    </div>
+                    <div v-else>
+                        <div class="more-reply-box" @click="loadMoreTalks(index,item.id)" v-if="item.isShowMoreTalk">
+                            <span>展开更多评论<i class="el-icon-caret-bottom"></i></span>
+                        </div>
+                        <div class="more-reply-box" v-else>
+                            <span><i class="el-icon-s-release"></i>暂无更多评论</span>
+                        </div>
                     </div>
                 </div>
-                <div class="more-reply-box" v-if="item.isLoadTalk">
-                    <span>正在加载评论...<i class="el-icon-loading"></i></span>
-                </div>
-                <div v-else>
-                    <div class="more-reply-box" @click="loadMoreTalks(index,item.id)" v-if="item.isShowMoreTalk">
-                        <span>展开更多评论<i class="el-icon-caret-bottom"></i></span>
-                    </div>
-                    <div class="more-reply-box" v-else>
-                        <span><i class="el-icon-s-release"></i>暂无更多评论</span>
-                    </div>
-                </div>
-                
             </div>
         </div>
-        <!-- 每次去请求内容时 -->
-        <div class="loading" v-if="isShowLoading">
-            正在获取更多内容<i class="el-icon-loading"></i>
+            <!-- 请求数据为空的时候显示 -->
+        <div class="placehodler-box" v-if="isShowNull">
+            <span v-if="loading">正在努力获取更多内容  ─=≡Σ(((つ•̀ω•́)つ <i class="el-icon-loading"></i></span>
+            <span v-else>sorry！人家也是有底线的嘛  ≦(._.)≧</span>
         </div>
-        <!-- 请求数据为空的时候显示 -->
-        <div class="placehodler-box" v-if="isShowNullContent">我也是有底线的~ 没有内容了o(╥﹏╥)o</div>
     </div>
 </template>
 <script>
-var utils = require('../utils/cookie.js');
-// import $ from 'jquery';s
+var sessionStorageUtil = require('../utils/sessionStorage.js');
+import {mapGetters} from 'vuex';
 export default {
     data () {
         return {
             dynamicInfo: [], //展示的数据，用于每次请求之后进行拼接的数据
             dynamicData: [] ,//请求回来的源数据
-            locationAccount: '', //本地cookie当中存储的记录
-            isShowLoading: false, //是否显示加载loading
-            isShowNullContent: false, //是否显示内容为空的时候占位内容
-            startNum: 0, //起始位置
-            limit: 3, //控制请求多少条数据
+            locationAccount: '', //本地session当中存储的记录,
+            talkLimit: 10, //每次去请求多少条评论
+            timer: null
         }
+    },
+    watch: {
+        dynamicInfoData(newValue) {
+            this.getData(newValue)
+        }
+
+    },
+    computed: {
+        ...mapGetters(['loading','isShowNull','dynamicInfoData']),
+        
     },
     methods: {
         //进入该文章详情
         gotoDetail () {
-            window.console.log('打开详情');
+            this.$message({
+                type: 'warning',
+                message: '抱歉，该功能暂不支持！'
+            })
         },
         //点击×号,删除自己的文章
         removeCard (dynamic_id,index) {
             this.$confirm('你确定要删除此条动态？','提示',{
                 type: 'warning'
             }).then(() => {
+                //删除文章信息
                 this.axios.post('/api/deleteDynamicInfo',{dynamic_id: dynamic_id})
                     .then((res) => {
                         if (res.data.type == 'success') {
+                            //删除说说图片信息
                             this.axios.post('/api/deleteDynamicImg',{dynamic_id: dynamic_id})
-                            .then((result) => {
-                                if (result.data.type == 'success') {
-                                    this.dynamicInfo.splice(index,1); //从此数据当中移除
-                                    this.$forceUpdate();
-                                }
-                            })
+                                .then((result) => {
+                                    if (result.data.type == 'success') {
+                                        this.dynamicInfo.splice(index,1); //从此数据当中移除
+                                        this.$forceUpdate();
+                                    }
+                                })
+                            //删除说说所有的评论
+                            this.axios.post('/api/deleteAllTalks',{dynamic_id: dynamic_id})
                         }
                          
                     })
@@ -333,14 +347,13 @@ export default {
             // 将评论存入到数据库
             var res = await this.axios.post('/api/insertTalk',{dynamic_id: dynamic_id,parentAccount: locationAccount,parentNickname: nickname,parentImgpath: imgpath,content: talkContent})
             if (res.data.type == 'success') {
-                window.console.log('评论id为' + dynamic_id + '说说成功');
                 var resultTalk = res.data.data[0];
                 resultTalk.replyArray = [];
                 this.dynamicInfo[index].talksArray.push(resultTalk);
                 //修改该篇说说的评论量
                 var talks = this.dynamicInfo[index].talks += 1;
                 this.axios.post('/api/updateTalks',{dynamic_id: dynamic_id,talks: talks})
-
+;
                 this.$forceUpdate(); //更新视图
             } else {
                 window.console.log('评论失败');
@@ -353,10 +366,9 @@ export default {
         },
         //加载更多评论
         async loadMoreTalks(index,dynamic_id) {
-            window.console.log('index：' + index, '说说id：' + dynamic_id);
             this.dynamicInfo[index].isLoadTalk = true;
 
-            this.dynamicInfo[index].talkStart = this.dynamicInfo[index].talkStart + 1;
+            this.dynamicInfo[index].talkStart = this.dynamicInfo[index].talkStart + this.talkLimit;
              
             var res = await this.getTalks(dynamic_id,this.dynamicInfo[index].talkStart);
 
@@ -460,133 +472,113 @@ export default {
             
             return res;
         },
-        // 发送请求，去数据库查找最近时间说说
-        async getDynamicData() {
-            this.isShowLoading = true;
-            try{
-                var res = await this.axios.get('/api/getDynamicInfo',{params: {start: this.startNum,nums: this.limit}});
-                if (res.data.type == 'success') {
-                    this.isShowLoading = false; //关闭loading
+        // 根据前面传递进来的数据进行获取，加工，赋值给最终要渲染的数据
+        async getData(d) {
+            this.dynamicData = d;
+            for (let i = 0; i < this.dynamicData.length; i++) {
 
-                    this.dynamicData = res.data.dynamicInfoArray;
-
-                    for (let i = 0; i < res.data.dynamicInfoArray.length; i++) {
-
-                        this.dynamicData[i].visible; //控制是否显示评论框
-                        this.dynamicData[i].talkContent; //评论框的值
-                        this.dynamicData[i].talkStart = 0; //请求评论的起始位置
-                        this.dynamicData[i].isLoadTalk = true; //是否显示正在加载评论loading,默认显示
-                        this.dynamicData[i].isShowMoreTalk = false//是否显示展示更多,默认不显示
-                        // 获取本机cookie当中的登录的账号
-                        this.locationAccount = utils.getCookie('account');
-                        // 获取用户是否已经点赞过
-                        var resultPraise = await this.axios.get('/api/getPraise',{params: {account: this.locationAccount,dynamic_id: this.dynamicData[i].id}})
-                        if (resultPraise.data.type == 'success') {
-                            if (resultPraise.data.data.length != 0) {
-                                this.dynamicData[i].isLike = true;
-                            } else {
-                                this.dynamicData[i].isLike = false;
-                            }
-                        } else {
-                            //服务端错误,默认没点赞
-                            this.dynamicData[i].isLike = false;
-                        }
-                        
-
-                        //判断获取到的说说是不是本人发布的
-                        if (this.dynamicData[i].account == this.locationAccount) {
-                           this.dynamicData[i].isShowAttention = false;
-                           this.dynamicData[i].isShowRemove = true;
-                        } else {
-                            this.dynamicData[i].isShowAttention = true;
-                            this.dynamicData[i].isShowRemove = false;
-                        }
-
-                        //根据本地账号去查询是否关注了此账号
-                        var resultAttention = await this.axios.get('/api/getAttention',{params: {account: this.locationAccount}});
-                        if (resultAttention.data.type == 'success') {
-                            // 判断有没有数据
-                            if (resultAttention.data.data.length != 0) {
-                                for (let k = 0; k < resultAttention.data.data.length; k++) {
-                                    if (this.dynamicData[i].account == resultAttention.data.data[k].targetAccount) {
-                                        this.dynamicData[i].isAttention = false;
-                                    } else {
-                                        this.dynamicData[i].isAttention = true;
-                                    }
-                                }
-                            } else {
-                                 this.dynamicData[i].isAttention = true;
-                            }
-                            
-                        } else {
-                            //当后台发生错误或者查询失败
-                            this.dynamicData[i].isAttention = true;
-                        }
-
-                        //请求该篇说说当中的图片信息
-                        var resultImg = await this.getDynamicImg(this.dynamicData[i].id);
-                        if (resultImg.data.type == 'success') {
-                            var imgArr = [];
-                            for (let j = 0; j < resultImg.data.imgList.length; j++ ) {
-                                imgArr.push('/api/getImgData?path=' + resultImg.data.imgList[j].path);
-                            }
-                            this.dynamicData[i].imgList = imgArr;
-                        } else {
-                            // 请求图片失败，赋值空
-                            this.dynamicData[i].imgList = [];
-                        }
-
-                        // 请求这一篇发表说说的用户的信息
-                        var result = await this.getUserInfo(this.dynamicData[i].account);
-                        if (result.data.type == 'success') {
-                            // 返回的是一个数组，处理一下
-                            this.dynamicData[i].userInfoData = result.data.userInfoData[0];
-                        }
-                        // 获取当前说说评论
-                        
-                        var resultTalk = await this.getTalks(this.dynamicData[i].id,this.dynamicData[i].talkStart);
-                        if (resultTalk.data.type == 'success') {
-                            this.dynamicData[i].isLoadTalk = false; //关闭loading
-
-                            this.dynamicData[i].talksArray = [];
-
-                            var data = resultTalk.data.data;
-                             //获取当前评论下的回复评论
-                            for (var n = 0; n < data.length; n ++) {
-                                var resultReply = await this.axios.post('/api/selectReply',{talks_id: data[n].id});
-                                // 查询回复评论成功
-                                if (resultReply.data.type == 'success') {
-                                    data[n].replyArray = resultReply.data.data;
-                                } else {
-                                    data[n].replyArray = [];
-                                }
-                            }
-                            //没有评论,显示暂无评论
-                            if (data.length == 0) {
-                                this.dynamicData[i].isShowMoreTalk = false;
-                            } else {
-                                this.dynamicData[i].isShowMoreTalk = true;
-                            }
-                            this.dynamicData[i].talksArray = this.dynamicData[i].talksArray.concat(data);
-                        }
-                        
+                this.dynamicData[i].visible; //控制是否显示评论框
+                this.dynamicData[i].talkContent; //评论框的值
+                this.dynamicData[i].talkStart = 0; //请求评论的起始位置
+                this.dynamicData[i].isLoadTalk = true; //是否显示正在加载评论loading,默认显示
+                this.dynamicData[i].isShowMoreTalk = false//是否显示展示更多,默认不显示
+                // 获取用户是否已经点赞过
+                var resultPraise = await this.axios.get('/api/getPraise',{params: {account: this.locationAccount,dynamic_id: this.dynamicData[i].id}})
+                if (resultPraise.data.type == 'success') {
+                    if (resultPraise.data.data.length != 0) {
+                        this.dynamicData[i].isLike = true;
+                    } else {
+                        this.dynamicData[i].isLike = false;
                     }
-                    //请求内容就是空,显示占位内容
-                    if(this.dynamicData.length == 0) {
-                        this.isShowNullContent = true;
-                    }
-                    this.dynamicInfo = this.dynamicInfo.concat(this.dynamicData);
-                    this.startNum += 3;
-                    window.console.log(this.dynamicInfo);
+                } else {
+                    //服务端错误,默认没点赞
+                    this.dynamicData[i].isLike = false;
                 }
                 
-            } catch(err) {
-                this.isShowLoading = false;
+
+                //判断获取到的说说是不是本人发布的
+                if (this.dynamicData[i].account == this.locationAccount) {
+                    this.dynamicData[i].isShowAttention = false;
+                    this.dynamicData[i].isShowRemove = true;
+                } else {
+                    this.dynamicData[i].isShowAttention = true;
+                    this.dynamicData[i].isShowRemove = false;
+                }
+
+                //根据本地账号去查询是否关注了此账号
+                var resultAttention = await this.axios.get('/api/getAttention',{params: {account: this.locationAccount}});
+                if (resultAttention.data.type == 'success') {
+                    // 判断有没有数据
+                    if (resultAttention.data.data.length != 0) {
+                        for (let k = 0; k < resultAttention.data.data.length; k++) {
+                            if (this.dynamicData[i].account == resultAttention.data.data[k].targetAccount) {
+                                this.dynamicData[i].isAttention = false;
+                            } else {
+                                this.dynamicData[i].isAttention = true;
+                            }
+                        }
+                    } else {
+                            this.dynamicData[i].isAttention = true;
+                    }
+                    
+                } else {
+                    //当后台发生错误或者查询失败
+                    this.dynamicData[i].isAttention = true;
+                }
+
+                //请求该篇说说当中的图片信息
+                var resultImg = await this.getDynamicImg(this.dynamicData[i].id);
+                if (resultImg.data.type == 'success') {
+                    var imgArr = [];
+                    for (let j = 0; j < resultImg.data.imgList.length; j++ ) {
+                        imgArr.push('/api/getImgData?path=' + resultImg.data.imgList[j].path);
+                    }
+                    this.dynamicData[i].imgList = imgArr;
+                } else {
+                    // 请求图片失败，赋值空
+                    this.dynamicData[i].imgList = [];
+                }
+
+                // 请求这一篇发表说说的用户的信息
+                var result = await this.getUserInfo(this.dynamicData[i].account);
+                if (result.data.type == 'success') {
+                    // 返回的是一个数组，处理一下
+                    this.dynamicData[i].userInfoData = result.data.userInfoData[0];
+                }
+
+                // 获取当前说说评论
+                var resultTalk = await this.getTalks(this.dynamicData[i].id,this.dynamicData[i].talkStart);
+                if (resultTalk.data.type == 'success') {
+                    this.dynamicData[i].isLoadTalk = false; //关闭loading
+
+                    this.dynamicData[i].talksArray = [];
+
+                    var data = resultTalk.data.data;
+                        //获取当前评论下的回复评论
+                    for (var n = 0; n < data.length; n ++) {
+                        var resultReply = await this.axios.post('/api/selectReply',{talks_id: data[n].id});
+                        // 查询回复评论成功
+                        if (resultReply.data.type == 'success') {
+                            data[n].replyArray = resultReply.data.data;
+                        } else {
+                            data[n].replyArray = [];
+                        }
+                    }
+                    //没有评论,或者评论数达不到的，显示暂无评论
+                    if (data.length == 0 || data.length <= 1) {
+                        this.dynamicData[i].isShowMoreTalk = false;
+                    } else {
+                        this.dynamicData[i].isShowMoreTalk = true;
+                    }
+                    this.dynamicData[i].talksArray = this.dynamicData[i].talksArray.concat(data);
+                }
+                
             }
+
+            // 把加工过的数据塞给要最终渲染使用的数据
+            this.dynamicInfo = this.dynamicData;
+            this.$forceUpdate();
             
-        },
-        load() {
-            window.console.log('ok');
         },
         // 根据说说返回的账号信息，去查找该账号的信息
         async getUserInfo(account) {
@@ -600,102 +592,71 @@ export default {
         },
         //计算时间
         getTime(time) {
-            // return  timeUtil.time(time)
             var oldTime = new Date(time);
             var newTime = new Date()
             var differYear = newTime.getFullYear() - oldTime.getFullYear();
+            var differMonth = (newTime.getMonth() + 1) - (oldTime.getMonth() + 1);
             var differDate = newTime.getDate() - oldTime.getDate();
-            var year = '';
-            var date = '';
+            var year = oldTime.getFullYear();
+            var date = oldTime.getDate();
             var month = oldTime.getMonth() + 1;
             var hours = oldTime.getHours();
             var minutes = oldTime.getMinutes();
-            if (differDate == 0) {
-                date = '今天'
-            } else if (differDate == 1) {
-                date = '昨天'
-            } else {
-                date = oldTime.getDate();
-            }
-            //当年分已经不是当年了，返回带年份的
+            
+            // 不是今年发布的，返回带年份的
             if (differYear > 0) {
-                year = oldTime.getFullYear();
                 return `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
             }
-            //当年分为今年，并且还是近两天发布的，
-            if (differYear == 0 && (differDate == 0 || differDate == 1)) {
-                return `${date < 10 ? '0' + date : date} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
+            //今年发布的
+            if (differYear == 0 ) {
+                // 判断是不是当月并且是最近两天的
+                if (differMonth == 0 && (differDate == 0 || differDate == 1)) {
+                    // 判断是不是当天
+                    if (differDate == 0) {
+                        date = '今天'
+                    } else if (differDate == 1) {
+                        date = '昨天'
+                    }
+                    return `${date} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
+                } else {
+                    // 不是最近两天发布的，但是是今年发布的
+                    return `${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
+                }
+               
             }
-            // 返回是今年，但是不是近两天发布的
-            return `${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
+           
             
             
         }
+        
        
     },
     created() {
-        this.locationAccount = utils.getCookie('account');
-        this.getDynamicData();
-    },
-    mounted() {
-        // var clientHeight;
-        // var scrollHeight;
-        // var top;
-        // var that = this;
-        // var body = document.getElementsByTagName('body')[0];
-
-        // // 监听滚动条变化
-        // body.onscroll =  function () {
-        //     clientHeight = document.documentElement.clientHeight; //获取可视区域高度
-        //     scrollHeight = document.documentElement.scrollHeight; //获取滚动条高度
-        //     top = document.documentElement.scrollTop; //获取滚动条距离滚动区域顶部高度
-        
-        //     if (scrollHeight - clientHeight - top == 0) {
-        //         window.console.log('到底啦');
-        //         that.getDynamicData();
-        //         window.console.log(that.dynamicInfo);
-        //         return;
-        //     }
-        // }
-        
-       
-
+        this.locationAccount = sessionStorageUtil.getSessionStorage('account');
+        this.getData(this.dynamicInfoData);
     }
 }
 </script>
 <style scoped>
 
-.dynamic-wrapper.placeholder {
-    height: 1000px;
-    background-color: #e3ddf0;
-    border: 1px solid #d2c8e6;
-    color: #2f2e33;
-}
+
 .placehodler-box {
     height: 150px;
-    background-color: #faf8ff;
+    background-color: #fef3dfc7;
     border: 1px solid #d2c8e6;
     text-align: center;
     line-height: 150px;
-    color: #827e8c;
+    color: #aca3c1;
+    border-radius: 5px;
+    font-size: 15px;
 }
-.loading {
-    height: 40px;
-    background-color: #faf8ff;
-    border: 1px solid #d2c8e6;
-    font-size: 14px;
-    line-height: 40px;
-    text-align: center;
-    color: #827e8c;
-    border-radius: 3px;
-}
+
 
 /* 说说外壳 -------*/
 .dynamic-wrapper .dynamicInfo-box {
     margin: 0px 0px 20px 0px;
-    border: 1px solid #d2c8e6;
-    background-color: #faf8ff;
-    /* background-color: rgba(250,248,255,.3); */
+    border: 1px solid #fdcfa1;
+    background-color: #fef3dfc7;
     border-radius: 4px;
     color: #2f2e33;
     
@@ -774,10 +735,10 @@ export default {
     width: 80px;
     height: 30px;
     outline: none;
-    background-color: #fff;
+    background-color: #fff4e2;
     border-radius: 8px;
-    color: rgb(250, 214, 12);
-    border: 1px solid rgb(250, 214, 12);
+    color: #f9b180;
+    border: 1px solid rgba(254, 150, 63, 0.32);
     cursor: pointer;
 }
 .dynamic-top .attention-btn i {
@@ -954,8 +915,8 @@ export default {
 
 .more-reply-box {
     height: 30px;
-    background-color: #d9d9db;
-    color: #827e8c;
+    background-color: #fe833f4d;
+    color: #d2956c;
     text-align: center;
     line-height: 30px;
     cursor: pointer;

@@ -3,19 +3,13 @@
         <!-- 轮播 -->
         <el-carousel height="60px" direction="vertical" autoplay indicator-position="none">
             <el-carousel-item>
-                <a href="#">
-                    <img src="../assets/img/headImg.png" alt="">
-                </a>
+                codeing... ヽ(o_ _)o
             </el-carousel-item>
             <el-carousel-item>
-                <a href="#">
-                    <img src="../assets/img/headImg.png" alt="">
-                </a>
+                codeing... ヽ(o_ _)o
             </el-carousel-item>
             <el-carousel-item>
-                <a href="#">
-                    <img src="../assets/img/headImg.png" alt="">
-                </a>
+                codeing... ヽ(o_ _)o
             </el-carousel-item>
             
         </el-carousel>
@@ -28,10 +22,10 @@
 .topAD-wrapper {
     position: relative;
     height: 60px;
-    background-color: rgb(115, 245, 115);
+    background-color: #fef3dfc7;
     margin-bottom: 15px;
     border-radius: 4px;
-    border: 1px solid #d2c8e6;
+    border: 1px solid #fdcfa1;
     cursor: pointer;
 }
 .topAD-wrapper a{
@@ -49,6 +43,7 @@
     top: 0;
     right: 0;
     font-size: 18px;
+    color: #fdcfa1;
     cursor: pointer;
 }
 </style>

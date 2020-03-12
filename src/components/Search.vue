@@ -1,55 +1,61 @@
 <template>
-  <el-autocomplete 
+  <el-input
     v-model="searchKeyWord"
-    :fetch-suggestions="querySearch"
-    @select="handleSelect"
-    placeholder="请输入查找的用户名或ID"
+    placeholder="请输入要查找的账号"
     clearable
     class="search-box"
+    size="small"
         >
-        <el-button type="primary" slot="append" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-    </el-autocomplete>
+            <el-button type="primary" icon="el-icon-search" size="small" slot="append" @click="handleSearch">搜索</el-button>
+  </el-input>
 </template>
 
 <script>
+var  sessionStorageUtil = require('../utils/sessionStorage.js');
 export default {
     data () {
         return {
-            hotKeyWord: [],
             searchKeyWord: ''
         }
     },
-    methods: {
-        querySearch (queryString,callback) {
-            var hotKeyWord = this.hotKeyWord;
-            var results = queryString ? hotKeyWord.filter(this.createFilter(queryString)) : hotKeyWord;
-            callback(results);
-        },
-        createFilter (queryString) {
-            return (item) => {
-                return (item.value.indexOf(queryString) === 0);
-            }
-        },
-        //点击推荐出来的搜索排行榜，进行搜索
-        handleSelect (item) {
-            window.console.log(item);
-        },
-        //点击搜索按钮进行搜索
-        handleSearch () {
-            window.console.log(this.searchKeyWord);
+    computed: {
+        key() {
+            return this.searchKeyWord;
         }
     },
+    methods: {
+        // //点击搜索按钮进行搜索,先去查找判断是否有该用户，在进行跳转
+        handleSearch () {
+            if (this.searchKeyWord.trim() == '') {
+                this.$message({
+                    type: 'warning',
+                    message: '请输入要搜索的账号！'
+                })
+                return ;
+            }
+            sessionStorageUtil.setSessionStorage('searchKey',this.searchKeyWord);
+            this.$router.push('/home/firstpage/search');
+            window.location.reload();
+        }
+                       
+    },
     mounted () {
-        this.hotKeyWord = [
-            {value: 'hha'},
-            {value: '999'}
-        ]
-    }
+        if (sessionStorageUtil.getSessionStorage('searchKey')) {
+             this.searchKeyWord = sessionStorageUtil.getSessionStorage('searchKey')
+        } else {
+            this.searchKeyWord = '';
+        }
+       
+    },
+    
+
 }
 </script>
 
 <style scoped>
 .search-box {
-    margin-top: 10px;
+    margin-top: 15px;
+    width: 250px;
+    font-size: 10px;
 }
 </style>

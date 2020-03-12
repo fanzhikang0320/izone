@@ -8,6 +8,7 @@
 import Dynamic from '@/components/Dynamic.vue'
 import TextEditor from '@/components/TextEditor.vue'
 import { setTimeout } from 'timers';
+var sessionStorageUtil = require('../utils/sessionStorage.js');
 export default {
     components: {
         Dynamic,
@@ -17,8 +18,9 @@ export default {
         return {
             data: [],
             startNum: 0,
+            fn1:'',
             limit: 12,
-            fn:''
+            locationAccount: ''
         }
     },
     computed: {
@@ -27,26 +29,25 @@ export default {
         }
     },
     methods: {
+        //根据自己的账号去进行获取内容
         getDynamicData(start) {
             //开启加载loading
-            this.$store.commit('changeLoading',true);
-
-            this.axios.get('/api/getDynamicInfo',{params: {start: start,nums: this.limit}})
+            this.$store.commit('changeLoading',true)
+            this.axios.get('/api/getDynamicInfoByAccount',{params: {account: this.locationAccount,start: start,nums: this.limit}})
                 .then((res) => {
                     if (res.data.type == 'success') {
                         
-                        for (var m = 0; m < res.data.dynamicInfoArray.length; m++) {
-                            this.data.push(res.data.dynamicInfoArray[m])
+                        for (var m = 0; m < res.data.data.length; m++) {
+                            this.data.push(res.data.data[m])
                         }
-                        //判断请求回来的数据是否已经完了
-                        if (res.data.dynamicInfoArray.length < this.limit) {
+                        if (res.data.data.length < this.limit) {
                             this.$store.commit('changeShowNull',true)
                         }
                         //更改仓库中的数据
                         this.$store.commit('changeData',this.data)
-                       //取消加载loading
+                         //取消加载loading
                         this.$store.commit('changeLoading',false)
-                    } else  {
+                    } else {
                         //查找失败
                          this.$store.commit('changeShowNull',true)
                         //更改仓库中的数据
@@ -61,12 +62,14 @@ export default {
             this.data.unshift(data);
             this.$store.commit('changeData',this.data)
         }
+
     },
     created() {
+        this.locationAccount = sessionStorageUtil.getSessionStorage('account');
         this.getDynamicData(this.startNum);
     },
     mounted() {
-         
+       
         var clientHeight;
         var scrollHeight;
         var top;
@@ -74,7 +77,7 @@ export default {
         var body = document.getElementById('app');
         var timer;
         // 监听滚动条变化
-        body.onscroll =  function () {
+        body.onscroll = function () {
             clientHeight = document.documentElement.clientHeight; //获取可视区域高度
             scrollHeight = document.documentElement.scrollHeight; //获取滚动条高度
             top = document.documentElement.scrollTop; //获取滚动条距离滚动区域顶部高度
@@ -86,14 +89,13 @@ export default {
                 },500)
             }
         }
-        
+       
     },
     beforeDestroy() { 
-        document.getElementById('app').onscroll = false;
+       document.getElementById('app').onscroll =false;
         this.$store.commit('changeData',[]);
         this.$store.commit('changeLoading',true);
         this.$store.commit('changeShowNull',false)
     }
-
 }
 </script>

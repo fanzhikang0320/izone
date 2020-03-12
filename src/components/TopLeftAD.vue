@@ -1,7 +1,7 @@
 <template>
     <div class="adWrapper">
-        这是广告
-        <span class="text-ad">广告</span>
+        codeing...
+        <span class="text-ad">AD</span>
     </div>
 </template>
 <style scoped>
@@ -11,7 +11,8 @@
     width: 260px;
     float: right;
     margin-bottom: 20px;
-    background-color: rgb(45, 223, 113);
+    background-color: #fef3dfc7;
+    border: 1px solid #fdcfa1;
 }
 .text-ad {
     position: absolute;
@@ -23,8 +24,10 @@
     text-align: center;
     line-height: 15px;
     font-size: 6px;
-    background-color: #fff;
+    background-color: #ffb672;
+    color: #fff;
 }
+
 </style>
 <script>
 export default {

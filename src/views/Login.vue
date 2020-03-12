@@ -1,5 +1,8 @@
 <template>
     <div class="form-container">
+        <div class="logo-box">
+            <img src="../assets/img/loginLogo.png" alt="">
+        </div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" label-position="right">
             <el-form-item label="账号" prop="account">
                 <el-input type="text" v-model="ruleForm.account"></el-input>
@@ -20,6 +23,7 @@
 
 <script>
 var cookieUtils = require('../utils/cookie.js');
+var sessionStorageUtils = require('../utils/sessionStorage.js');
 export default {
     data () {
         var validateAccount = (rule,value,callback) => {
@@ -69,6 +73,8 @@ export default {
                                 if (that.checked) {
                                     cookieUtils.setCookie('account',this.ruleForm.account,1)
                                 }
+                                //将登陆的账号存储在本地缓存
+                                sessionStorageUtils.setSessionStorage('account',this.ruleForm.account)
                                 window.open('/home','_self');
                                
                             } else {
@@ -99,11 +105,32 @@ export default {
 </script>
 
 <style scoped>
+
+.logo-box {
+    width: 100%;
+    height: 120px;
+    /* background-color: aqua; */
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+
+}
+.logo-box  img {
+    display: block;
+    height: 100px;
+    
+}
 .form-container {
-    border: 1px solid #000;
     margin: 0 auto;
     width: 450px;
     padding: 30px;
+    margin-top: 80px;
+    border: 1px dashed rgb(206, 203, 203);
+    border-radius: 6px;
+    background-color: #fef3dfc7;
 }
 .btn {
     width: 150px;

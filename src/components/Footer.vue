@@ -39,13 +39,14 @@ export default {
   width: 1024px;
   min-width: 1024px;
   height: 60px;
-  /* background-color: #fff; */
+  background-color: #fef3dfc7;
   margin: 0 auto;
   overflow: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  border-radius: 4px;
   
 
 }
