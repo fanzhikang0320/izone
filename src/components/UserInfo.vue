@@ -1,7 +1,7 @@
 <template>
   <div class="userInfo-wrapper">
       <div class="userInfo-area">
-            <img :src="'/api/getImgData?path=' + userInfo.imgpath" :title="userInfo.account" class="head-img">
+            <img :src="'http://127.0.0.1:8081/api/getImgData?path=' + userInfo.imgpath" :title="userInfo.account" class="head-img">
             <p class="nickname" :title="userInfo.nickname">{{userInfo.nickname}}</p>
             <div class="probobly-info">
                 <div class="user-age">

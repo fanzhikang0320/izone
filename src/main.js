@@ -8,6 +8,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+
+
+axios.defaults.baseURL = 'http://127.0.0.1:8081';
 Vue.use(VueAxios,axios);
 var cookieUtil = require('./utils/cookie.js');
 var sessionStorageUtil = require('./utils/sessionStorage.js');

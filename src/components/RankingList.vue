@@ -12,7 +12,7 @@
                     effect="light"
                 >
                     <div class="ranking-top">
-                        <img :src="'/api/getImgData?path=' + item.imgpath"  alt="" class="headImg">
+                        <img :src="'http://127.0.0.1:8081/api/getImgData?path=' + item.imgpath"  alt="" class="headImg">
                         <div class="user-item">
                             <span class="nickname">{{item.nickname}}</span>
                             <img v-if="start == 0 && (index == 0 || index == 1 || index == 2)" :src="require('@/assets/img/'+ index +'.png')" alt="" class="cup">
@@ -216,7 +216,7 @@ export default {
     height: 100%;
     display: block;
     border-radius: 5px;
-    background-color: rgb(177, 164, 160);
+    /* background-color: rgb(177, 164, 160); */
 }
 
 .ranking-bottom {

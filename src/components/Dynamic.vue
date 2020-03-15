@@ -6,7 +6,7 @@
             <div v-for="(item,index) in dynamicInfo" :key="index" class="dynamicInfo-box">
                 <!-- 说说顶部区域 -->
                 <div class="dynamic-top" @click="gotoDetail(index)">
-                    <img :src="'/api/getImgData?path=' + item.userInfoData.imgpath" class="headImg">
+                    <img :src="'http://127.0.0.1:8081/api/getImgData?path=' + item.userInfoData.imgpath" class="headImg">
                     <div class="top-center">
                         <p class="nickname">{{item.userInfoData.nickname}}</p>
                         <div class="time-box">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="dynamic-img-box" @click.stop v-if="item.imgList.length != 0">
                         <!-- 图片为一张的时候 -->
-                        <el-image v-if="item.imgList.length == 1" lazy :preview-src-list="item.imgList" :src="item.imgList[0]" style="width:240px;height:320px">
+                        <el-image v-if="item.imgList.length == 1" lazy :preview-src-list="item.imgList" :src="'http://127.0.0.1:8081' + item.imgList[0]" style="width:240px;height:320px">
                             <!-- 图片未加载之前的占位内容 -->
                             <div slot="placeholder" style="width:240px;height:320px;font-size:50px;backgroundColor:#ccc">
                                 <i class="el-icon-loading"></i>
@@ -43,7 +43,7 @@
                             </div>
                         </el-image>
                         <!-- 当图片显示多张的时候 -->
-                        <el-image  v-else :src="img" class="dynamic-img" fit="cover" lazy :preview-src-list="item.imgList" v-for="(img,index) in item.imgList" :key="index">
+                        <el-image  v-else :src="'http://127.0.0.1:8081' + img" class="dynamic-img" fit="cover" lazy :preview-src-list="item.imgList" v-for="(img,index) in item.imgList" :key="index">
                             <!-- 图片未加载之前的占位内容 -->
                             <div slot="placeholder" style="width:155px;height:155px;font-size:50px;backgroundColor:#ccc">
                                 <i class="el-icon-loading"></i>
@@ -100,7 +100,7 @@
                         <div class="reply-box" v-for="(talksItem,talksIndex) in item.talksArray" :key="talksIndex">
                             <!-- 一级评论 -->
                             <div class="reply-item">
-                                <img :src="'/api/getImgData?path=' + talksItem.imgpath" alt="">
+                                <img :src="'http://127.0.0.1:8081/api/getImgData?path=' + talksItem.imgpath" alt="">
                                 <div class="reply-item-right">
                                     <div>
                                         <span class="nickname">{{talksItem.parentNickname}}</span>
@@ -119,7 +119,7 @@
                             <!-- 回复区 -->
                             <div v-if="talksItem.replyArray.length != 0">
                                 <div class="reply-item reply-c"  v-for="(replyItem,replyIndex) in talksItem.replyArray" :key="replyIndex">
-                                    <img :src="'/api/getImgData?path=' + replyItem.parentImgpath" alt="">
+                                    <img :src="'http://127.0.0.1:8081/api/getImgData?path=' + replyItem.parentImgpath" alt="">
                                     <div class="reply-item-right">
                                         <div>
                                             <span class="nickname">{{replyItem.parentNickname}}</span>
@@ -453,7 +453,6 @@ export default {
                                 var talks = this.dynamicInfo[index].talks += 1;
 
                                 this.axios.post('/api/updateTalks',{dynamic_id: dynamic_id,talks: talks});
-                                window.console.log('回复成功',talks);
                                 this.$forceUpdate();
                             }
                         })

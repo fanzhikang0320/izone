@@ -4,7 +4,7 @@
             <div v-if="caseInfo.length != 0" style="display:flex;flex-wrap: wrap">
                 <div class="caseInfo-box" @click="onlineView(item.url)" v-for="(item,index) in caseInfo" :key="index">
                     <div class="caseInfo-top">
-                        <el-image style="width:100px;height:100px;borderRadius:8px" :src="'/api/getImgData?path='+ item.imgpath" fit="cover">
+                        <el-image style="width:100px;height:100px;borderRadius:8px" :src="'http://127.0.0.1:8081/api/getImgData?path='+ item.imgpath" fit="cover">
                             <!-- 图片未加载占位内容 -->
                             <div slot="placeholder" style="width:100px;height:100px;display:flex;justifyContent:center;alignItems:center;fontSize:50px;color:#ccc">
                                 <i class="el-icon-loading"></i>
@@ -125,7 +125,7 @@ export default {
                 cancelButtonText: '再想想'
             }).then(() => {
                 var a = document.createElement('a');
-                a.href = '/api/downLoadOtherData?path=' + path;
+                a.href = 'http://127.0.0.1:8081/api/downLoadOtherData?path=' + path;
                 a.download = 'demo.zip';
                 a.click();
             }).catch(() => {

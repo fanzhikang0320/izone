@@ -15,7 +15,7 @@
                 <img src="@/assets/img/emoji.png" alt="添加表情" title="添加表情" @click="addEmoji">
                 <div class="upload-box">
                     <el-upload
-                        action="/api/dynamicImg"
+                        action="http://127.0.0.1:8081/api/dynamicImg"
                         multiple
                         :limit="limit"
                         :on-exceed="handleExceed"
@@ -132,7 +132,7 @@ export default {
                      //将已经写入数据库的东西根据id在重新删掉
                     this.axios.post('/api/deleteDynamicInfo',this.msg)
                     this.clearData();
-                })
+                }).catch(() => {})
            
         },
         //点击发表时，发送请求，将图片还有文字外加地址一起发送，开启loading
@@ -160,7 +160,7 @@ export default {
                     showClose: false
                 }).then(() => {
 
-                })
+                }).catch(() => {})
                 return;
             }
             
@@ -171,7 +171,6 @@ export default {
             this.dynamicInfo.city = session.getSessionStorage('city');
             //将说说内容和城市发送给后端
             var res = await this.axios.post('/api/dynamicInfo',this.dynamicInfo);
-
             if (res.data.type === 'success') {
                 // 将返回的当前说说id，再次抛送给后台，关闭loading
                 this.msg.dynamic_id = res.data.dynamic_id;
@@ -205,7 +204,7 @@ export default {
                 })
                 .then(() => {
                     this.clearData();
-                })
+                }).catch(() =>{})
             }
             
         }

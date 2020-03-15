@@ -6,7 +6,7 @@
 async function getClientIp (that) {
     var clientIP = ''
     try {
-        var pro = await that.axios.get('/getClientIP');
+        var pro = await that.axios.get('http://pv.sohu.com/cityjson?id=utf-8');
         var str = pro.data.match(/\{[\S\s]+\}/)[0];
         clientIP = JSON.parse(str).cip;
     } catch (err) {
@@ -25,7 +25,7 @@ async function getClientIp (that) {
 async function getLocation (that,ip) {
     var location = {};
     try {
-        var pro = await that.axios({url: '/getLocation',method: 'get',params: {ip: ip}});
+        var pro = await that.axios({url: 'http://ip.taobao.com/service/getIpInfo.php',method: 'get',params: {ip: ip}});
         location = pro.data.data
     } catch(err) {
         return location
@@ -41,7 +41,7 @@ async function getLocationWeather (that,location) {
     var data = {};
     try {
         var key = '53d55432520047dbb54f21c0ece5fe89';
-        var pro = await that.axios({url: '/getWeather',params: {location: location,key: key}});
+        var pro = await that.axios({url: 'https://free-api.heweather.net/s6/weather/now',params: {location: location,key: key}});
         data = pro.data.HeWeather6[0].now;
     } catch(err) {
         window.console.log(err);

@@ -7,7 +7,7 @@
                 <div class="information" v-for="(item,index) in userInfo" :key="index">
                     <el-popover trigger="hover" placement="bottom">
                         <el-upload
-                            :action="'/api/updateHeadImg?account='+ locationAccount" 
+                            :action="'http://127.0.0.1:8081/api/updateHeadImg?account='+ locationAccount" 
                             :multiple="false"
                             :show-file-list="false"
                             accept="image/*"
@@ -17,7 +17,7 @@
                         >
                             <span class="updateAvatar-text">修改头像</span>
                         </el-upload>
-                        <img :src="'/api/getImgData?path=' + item.imgpath" class="headImg" slot="reference">
+                        <img :src="'http://127.0.0.1:8081/api/getImgData?path=' + item.imgpath" class="headImg" slot="reference">
                     </el-popover>
                     <div class="nickname">{{item.nickname}}</div>
                     <div class="info-content">

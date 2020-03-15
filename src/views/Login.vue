@@ -17,7 +17,7 @@
                 <el-button class="btn" type="primary" :loading="isLoading" round @click="formSubmit">{{btnContent}}</el-button>
             </el-form-item>
         </el-form>
-        <el-link type="success" class="link" href="/register">没有账号？马上去注册</el-link>
+        <router-link  class="link" :to="{name: 'register'}">没有账号？马上去注册</router-link>
     </div>
 </template>
 
@@ -56,6 +56,11 @@ export default {
     },
     methods: {
         async formSubmit () {
+
+            // 由于没有找到获取地理ip，先设置默认
+            sessionStorageUtils.setSessionStorage('region','中国');
+            sessionStorageUtils.setSessionStorage('city','未知');
+                            
             this.$refs['ruleForm'].validate((valid) => {
                 if (valid) {
                     //校验成功,开启loading，发送请求，成功关闭loading，跳转，失败关闭loading，弹框
@@ -64,6 +69,7 @@ export default {
                     let that = this;
                     this.axios.post('/api/getlogin',this.ruleForm)
                         .then((res) => {
+                            
                             //判断返回结果是否可以登录
                             if (res.data.isLogin) {
                                 //可以登陆
@@ -75,7 +81,8 @@ export default {
                                 }
                                 //将登陆的账号存储在本地缓存
                                 sessionStorageUtils.setSessionStorage('account',this.ruleForm.account)
-                                window.open('/home','_self');
+
+                                this.$router.push({name: 'home'})
                                
                             } else {
                                 that.isLoading = false;
@@ -139,6 +146,12 @@ export default {
 .link {
     font-size: 12px;
     float: right;
+    text-decoration: none;
+    color: #35a0f8;
     transform: translateY(-15px);
+}
+.link:hover {
+    color:#0a8df8;
+
 }
 </style>
