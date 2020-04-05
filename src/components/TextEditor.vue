@@ -15,7 +15,7 @@
                 <img src="@/assets/img/emoji.png" alt="添加表情" title="添加表情" @click="addEmoji">
                 <div class="upload-box">
                     <el-upload
-                        action="http://127.0.0.1:8081/api/dynamicImg"
+                        action="/api/dynamicImg"
                         multiple
                         :limit="limit"
                         :on-exceed="handleExceed"

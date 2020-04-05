@@ -1,3 +1,11 @@
+/*
+ * @Description: 
+ * @version: 
+ * @Author: Zhikang Fan
+ * @Date: 2020-04-03 06:46:26
+ * @LastEditors: Zhikang Fan
+ * @LastEditTime: 2020-04-03 08:01:38
+ */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -10,7 +18,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 
 
-axios.defaults.baseURL = 'http://127.0.0.1:8081';
+axios.defaults.baseURL = 'http://127.0.0.1:8080';
 Vue.use(VueAxios,axios);
 var cookieUtil = require('./utils/cookie.js');
 var sessionStorageUtil = require('./utils/sessionStorage.js');
@@ -40,3 +48,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+

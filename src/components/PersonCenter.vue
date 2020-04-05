@@ -7,7 +7,7 @@
                 <div class="information" v-for="(item,index) in userInfo" :key="index">
                     <el-popover trigger="hover" placement="bottom">
                         <el-upload
-                            :action="'http://127.0.0.1:8081/api/updateHeadImg?account='+ locationAccount" 
+                            :action="'/api/updateHeadImg?account='+ locationAccount" 
                             :multiple="false"
                             :show-file-list="false"
                             accept="image/*"
@@ -300,6 +300,7 @@ export default {
                     message: '更新头像失败，请稍后再试！'
                 })
             }
+            window.location.reload(); //强制刷新
         },
         //选择要上传的头像
         fileChange(file,fileList) {

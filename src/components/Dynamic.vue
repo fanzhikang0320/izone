@@ -356,7 +356,10 @@ export default {
 ;
                 this.$forceUpdate(); //更新视图
             } else {
-                window.console.log('评论失败');
+                this.$message({
+                    message: '评论发表失败！（暂不支持表情符号）',
+                    type: 'error'
+                })
             }
         },
         // 取消评论
